@@ -113,3 +113,12 @@ table {
     background-color: #3d434a;
     color: white;
 }
+.dataTables_filter label {
+    color: white;
+}
+.dataTables_length label {
+    color: white;
+}
+div.dataTables_info {
+    color: white !important;
+}

@@ -25,21 +25,22 @@ class AuthGates
         foreach ($userRoles as $userRole) {
             $permissions = Role::find($userRole)->permissions;
             foreach ($permissions as $permission) {
-                $userPermissions[$permission->title] = $permission->id;
+                $userPermissions[] = $permission->title;
             }
         }
 
         foreach ($userRanks as $userRank) {
             $permissions = Rank::find($userRank)->permissions;
             foreach ($permissions as $permission) {
-                $userPermissions[$permission->title] = $permission->id;
+                $userPermissions[] = $permission->title;
             }
         }
 
         $permissionsArray = Permission::pluck('id', 'title')->toArray();
         foreach ($permissionsArray as $title => $id) {
-            Gate::define($title, function ($user) use ($userPermissions, $permissionsArray) {
-                return count(array_intersect($userPermissions, $permissionsArray)) > 0;
+            Gate::define($title, function ($user) use ($userPermissions, $title) {
+                if ($user->is_admin) { return true; }
+                return in_array($title, $userPermissions);
             });
         }
 

@@ -28,10 +28,7 @@ class StoreUserRequest extends FormRequest
             ],
             'badge' => [
                 'required',
-                'nullable',
-                'integer',
-                'min:-2147483648',
-                'max:2147483647',
+                'string',
                 'unique:users,badge',
             ],
             'roles.*' => [

@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="badge">{{ trans('cruds.user.fields.badge') }}</label>
-                <input class="form-control {{ $errors->has('badge') ? 'is-invalid' : '' }}" type="number" name="badge" id="badge" value="{{ old('badge', $user->badge) }}" step="1" required>
+                <input class="form-control {{ $errors->has('badge') ? 'is-invalid' : '' }}" type="text" name="badge" id="badge" value="{{ old('badge', $user->badge) }}" step="1" required>
                 @if($errors->has('badge'))
                     <span class="text-danger">{{ $errors->first('badge') }}</span>
                 @endif
@@ -115,13 +115,23 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.certifications_helper') }}</span>
             </div>
-            <div class="form-group">
-                <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
-                </button>
-            </div>
-        </form>
+@if(Auth::user()->is_admin)
+    <div class="form-group">
+        <label class="required" for="password">{{ trans('cruds.user.fields.password') }}</label>
+        <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password" name="password" id="password">
+        @if($errors->has('password'))
+            <span class="text-danger">{{ $errors->first('password') }}</span>
+        @endif
+        <span class="help-block">{{ trans('cruds.user.fields.password_helper') }}</span>
     </div>
+    @endif
+<div class="form-group">
+    <button class="btn btn-danger" type="submit">
+        {{ trans('global.save') }}
+    </button>
+</div>
+</form>
+</div>
 </div>
 
 

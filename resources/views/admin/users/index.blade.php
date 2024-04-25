@@ -60,26 +60,39 @@
 
                             </td>
                             <td>
-                                {{ $user->call_sign ?? '' }}
+                                <a href="{{ route('admin.users.show', $user->id) }}">
+                                    {{ $user->call_sign ?? '' }}
+                                </a>
                             </td>
                             <td>
-                                {{ $user->name ?? '' }}
+                                <a href="{{ route('admin.users.show', $user->id) }}">
+                                    {{ $user->name ?? '' }}
                             </td>
                             <td>
-                                {{ $user->badge ?? '' }}
+                                <a href="{{ route('admin.users.show', $user->id) }}">
+                                    {{ $user->badge ?? '' }}
+                                </a>
                             </td>
                             <td><span hidden="hidden">{{ $user->rank?->id -1 ?? '' }}</span>
-                                {{ $user->rank->title ?? '' }}
+                                <a href="{{ route('admin.users.show', $user->id) }}">
+                                 {{ $user->rank->title ?? '' }}
+                                </a>
                             </td>
                             <td>
+                                <a href="{{ route('admin.users.show', $user->id) }}">
                                 {{ App\Models\User::STATUS_SELECT[$user->status] ?? '' }}
+                                </a>
                             </td>
                             <td>
+                                <a href="{{ route('admin.users.show', $user->id) }}">
                                 {{ $user->phone_number ?? '' }}
+                                </a>
                             </td>
                             @can('disciplinary_access')
                             <td>
+                                <a href="{{ route('admin.users.show', $user->id) }}">
                                 {{ $user->strike_points ?? '' }}
+                                </a>
                             </td>
                             @endcan
                             <td>
@@ -95,17 +108,21 @@
                                 @endcan
 
                                 @can('user_edit')
+                                        @if (Auth::user()->is_admin || $user->rank_id > Auth::user()->rank_id)
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
+                                            @endif
                                 @endcan
 
                                 @can('user_delete')
+                                    @if (Auth::user()->is_admin || $user->rank_id > Auth::user()->rank_id)
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
+                                        @endif
                                 @endcan
 
                             </td>
@@ -126,6 +143,11 @@
 <script>
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+        delete dtButtons[2]
+        delete dtButtons[3]
+        delete dtButtons[4]
+        delete dtButtons[5]
+        delete dtButtons[6]
 @can('user_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {

@@ -102,8 +102,8 @@
                             {{ trans('cruds.user.fields.certifications') }}
                         </th>
                         <td>
-                            @foreach($user->certifications as $key => $certifications)
-                                <span class="label label-info">{{ $certifications->name }}</span>
+                            @foreach($user->certifications as $key => $item)
+                                <span class="badge badge-info">{{ $item->name }}</span>
                             @endforeach
                         </td>
                     </tr>

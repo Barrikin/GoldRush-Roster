@@ -53,6 +53,7 @@ class User extends Authenticatable
         'email',
         'email_verified_at',
         'rank_id',
+        'change_password',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -63,11 +64,10 @@ class User extends Authenticatable
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function getIsAdminAttribute()
+    public function isAdmin()
     {
-        return $this->roles()->where('id', 1)->exists();
+        return $this->is_admin;
     }
-
     public function getStrikePointsAttribute()
     {
         $disciplinary = Disciplinary::query()

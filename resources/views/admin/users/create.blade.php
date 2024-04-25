@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="badge">{{ trans('cruds.user.fields.badge') }}</label>
-                <input class="form-control {{ $errors->has('badge') ? 'is-invalid' : '' }}" type="number" name="badge" id="badge" value="{{ old('badge', '') }}" step="1" required>
+                <input class="form-control {{ $errors->has('badge') ? 'is-invalid' : '' }}" type="text" name="badge" id="badge" value="{{ old('badge', '') }}" step="1" required>
                 @if($errors->has('badge'))
                     <span class="text-danger">{{ $errors->first('badge') }}</span>
                 @endif

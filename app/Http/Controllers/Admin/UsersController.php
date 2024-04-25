@@ -52,11 +52,13 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $roles = Role::pluck('title', 'id');
 
         $certifications = Certification::pluck('name', 'id');
 
-        $ranks = Rank::pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $ranks = Rank::where('id', '>', Auth::user()->rank_id)->pluck('title', 'id');
 
         $user->load('roles', 'certifications', 'rank');
 
@@ -65,6 +67,9 @@ class UsersController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
+        abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if($request->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->update($request->all());
         $user->roles()->sync($request->input('roles', []));
         $user->certifications()->sync($request->input('certifications', []));
@@ -85,6 +90,8 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->delete();
 
         return back();
@@ -95,6 +102,7 @@ class UsersController extends Controller
         $users = User::find(request('ids'));
 
         foreach ($users as $user) {
+            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
             $user->delete();
         }
 

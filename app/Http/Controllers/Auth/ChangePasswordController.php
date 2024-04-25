@@ -20,7 +20,7 @@ class ChangePasswordController extends Controller
 
     public function update(UpdatePasswordRequest $request)
     {
-        auth()->user()->update($request->validated());
+        auth()->user()->update([$request->validated(), 'change_password' => false]);
 
         return redirect()->route('profile.password.edit')->with('message', __('global.change_password_success'));
     }
@@ -32,18 +32,5 @@ class ChangePasswordController extends Controller
         $user->update($request->validated());
 
         return redirect()->route('profile.password.edit')->with('message', __('global.update_profile_success'));
-    }
-
-    public function destroy()
-    {
-        $user = auth()->user();
-
-        $user->update([
-            'email' => time() . '_' . $user->email,
-        ]);
-
-        $user->delete();
-
-        return redirect()->route('login')->with('message', __('global.delete_account_success'));
     }
 }

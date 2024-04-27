@@ -34,7 +34,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.badge_helper') }}</span>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label for="roles">{{ trans('cruds.user.fields.roles') }}</label>
                 <div style="padding-bottom: 4px">
                     <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
@@ -49,7 +49,7 @@
                     <span class="text-danger">{{ $errors->first('roles') }}</span>
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.roles_helper') }}</span>
-            </div>
+            </div>-->
             <div class="form-group">
                 <label class="required" for="rank_id">{{ trans('cruds.user.fields.rank') }}</label>
                 <select class="form-control select2 {{ $errors->has('rank') ? 'is-invalid' : '' }}" name="rank_id" id="rank_id" required>
@@ -61,6 +61,22 @@
                     <span class="text-danger">{{ $errors->first('rank') }}</span>
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.rank_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="certifications">{{ trans('cruds.user.fields.certifications') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('certifications') ? 'is-invalid' : '' }}" name="certifications[]" id="certifications" multiple>
+                    @foreach($certifications as $id => $certification)
+                        <option value="{{ $id }}" {{ (in_array($id, old('certifications', [])) || $user->certifications->contains($id)) ? 'selected' : '' }}>{{ $certification }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('certifications'))
+                    <span class="text-danger">{{ $errors->first('certifications') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.certifications_helper') }}</span>
             </div>
             <div class="form-group">
                 <label class="required">{{ trans('cruds.user.fields.status') }}</label>
@@ -99,22 +115,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.time_zone_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label for="certifications">{{ trans('cruds.user.fields.certifications') }}</label>
-                <div style="padding-bottom: 4px">
-                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
-                </div>
-                <select class="form-control select2 {{ $errors->has('certifications') ? 'is-invalid' : '' }}" name="certifications[]" id="certifications" multiple>
-                    @foreach($certifications as $id => $certification)
-                        <option value="{{ $id }}" {{ (in_array($id, old('certifications', [])) || $user->certifications->contains($id)) ? 'selected' : '' }}>{{ $certification }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('certifications'))
-                    <span class="text-danger">{{ $errors->first('certifications') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.user.fields.certifications_helper') }}</span>
-            </div>
+
 @if(Auth::user()->is_admin)
     <div class="form-group">
         <label class="required" for="password">{{ trans('cruds.user.fields.password') }}</label>

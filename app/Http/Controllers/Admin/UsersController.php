@@ -10,6 +10,7 @@ use App\Models\Certification;
 use App\Models\Rank;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +18,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::with(['roles', 'certifications', 'rank'])->get();
+        if ($request->trashed == 'true') {
+            $users = User::onlyTrashed()->with(['roles', 'certifications', 'rank'])->get();
+        }
+        else {
+            $users = User::with(['roles', 'certifications', 'rank'])->get();
+        }
 
         return view('admin.users.index', compact('users'));
     }
@@ -34,14 +40,23 @@ class UsersController extends Controller
 
         $certifications = Certification::pluck('name', 'id');
 
-        $ranks = Rank::where('id', '>', Auth::id())->pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
+        if (Auth::user()->isAdmin()) {
+            $ranks = Rank::orderBy('rank_order')->pluck('title', 'id');
+        }
+        else {
+            $ranks = Rank::where('id', '>', Auth::user()->rank_id)->orderBy('rank_order')->pluck('title', 'id');
+        }
 
         return view('admin.users.create', compact('certifications', 'ranks', 'roles'));
     }
 
     public function store(StoreUserRequest $request)
     {
-        $user = User::create($request->all());
+        $input = $request->all();
+        if ($request->hired_on == '') { $input['hired_on'] = Carbon::now()->format('Y-m-d'); }
+        $input['password'] = $request->phone_number;
+        $input['change_password'] = true;
+        $user = User::create($input);
         $user->roles()->sync($request->input('roles', []));
         $user->certifications()->sync($request->input('certifications', []));
 
@@ -52,13 +67,21 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (! Auth::user()->isAdmin()) {
+            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        }
 
         $roles = Role::pluck('title', 'id');
 
         $certifications = Certification::pluck('name', 'id');
 
-        $ranks = Rank::where('id', '>', Auth::user()->rank_id)->pluck('title', 'id');
+        if (Auth::user()->isAdmin()) {
+            $ranks = Rank::orderBy('rank_order')->pluck('title', 'id');
+        }
+        else {
+            $ranks = Rank::where('id', '>', Auth::user()->rank_id)->orderBy('rank_order')->pluck('title', 'id');
+        }
+
 
         $user->load('roles', 'certifications', 'rank');
 
@@ -67,8 +90,10 @@ class UsersController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
-        abort_if($request->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (! Auth::user()->isAdmin()) {
+            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+            abort_if($request->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        }
 
         $user->update($request->all());
         $user->roles()->sync($request->input('roles', []));
@@ -86,13 +111,23 @@ class UsersController extends Controller
         return view('admin.users.show', compact('user'));
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
         abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (! Auth::user()->isAdmin()) {
+            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        }
 
-        $user->delete();
+        if ($request->force_delete) {
+            $user->forceDelete();
+        }
+        else if ($request->restore) {
+            $user->forceDelete();
+        }
+        else {
+            $user->delete();
+        }
 
         return back();
     }
@@ -102,7 +137,9 @@ class UsersController extends Controller
         $users = User::find(request('ids'));
 
         foreach ($users as $user) {
-            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+            if (! Auth::user()->isAdmin()) {
+                abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+            }
             $user->delete();
         }
 

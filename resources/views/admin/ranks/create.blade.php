@@ -10,6 +10,14 @@
         <form method="POST" action="{{ route("admin.ranks.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
+                <label class="required" for="rank_order">{{ trans('cruds.rank.fields.rank_order') }}</label>
+                <input class="form-control {{ $errors->has('rank_order') ? 'is-invalid' : '' }}" type="text" name="rank_order" id="rank_order" value="{{ old('rank_order', '') }}" required>
+                @if($errors->has('rank_order'))
+                    <span class="text-danger">{{ $errors->first('rank_order') }}</span>
+                @endif
+                <span class="help-block">{{ trans(' ') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="title">{{ trans('cruds.rank.fields.title') }}</label>
                 <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title" id="title" value="{{ old('title', '') }}" required>
                 @if($errors->has('title'))

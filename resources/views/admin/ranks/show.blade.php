@@ -17,10 +17,10 @@
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.rank.fields.id') }}
+                            {{ trans('cruds.rank.fields.rank_order') }}
                         </th>
                         <td>
-                            {{ $rank->id }}
+                            {{ $rank->rank_order }}
                         </td>
                     </tr>
                     <tr>

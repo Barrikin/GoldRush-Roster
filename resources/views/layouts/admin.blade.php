@@ -221,7 +221,7 @@
           columns: ':visible'
         }
       },
-      {
+      /*{
         extend: 'copy',
         className: 'btn-default',
         text: copyButtonTrans,
@@ -260,7 +260,7 @@
         exportOptions: {
           columns: ':visible'
         }
-      },
+      },*/
       {
         extend: 'colvis',
         className: 'btn-default',
@@ -268,7 +268,32 @@
         exportOptions: {
           columns: ':visible'
         }
-      }
+      },
+        @if( Request::input('trashed') == 'true' )
+        {
+            text: 'Show Active',
+            className: 'btn-success',
+            titleAttr: 'Show Active items',
+            init: function (dt, node, config) {
+                $(node).click(function () {
+                    window.location.href = '{{Request::url()}}?trashed=false'
+                })
+            }
+
+        }
+        @else
+        {
+            text: 'Show Deleted',
+            className: 'btn-warning',
+            titleAttr: 'Show Deleted items',
+            init: function (dt, node, config) {
+                $(node).click(function () {
+                    window.location.href = '{{Request::url()}}?trashed=true'
+                })
+            }
+
+        }
+        @endif
     ]
   });
 

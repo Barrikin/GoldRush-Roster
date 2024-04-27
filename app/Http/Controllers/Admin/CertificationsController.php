@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroyCertificationRequest;
 use App\Http\Requests\StoreCertificationRequest;
 use App\Http\Requests\UpdateCertificationRequest;
 use App\Models\Certification;
+use App\Models\Permission;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class CertificationsController extends Controller
     {
         abort_if(Gate::denies('certification_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $certifications = Certification::all();
+        $certifications = Certification::with(['permissions'])->get();
 
         return view('admin.certifications.index', compact('certifications'));
     }
@@ -26,12 +27,15 @@ class CertificationsController extends Controller
     {
         abort_if(Gate::denies('certification_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.certifications.create');
+        $permissions = Permission::pluck('title', 'id');
+
+        return view('admin.certifications.create', compact('permissions'));
     }
 
     public function store(StoreCertificationRequest $request)
     {
         $certification = Certification::create($request->all());
+        $certification->permissions()->sync($request->input('permissions', []));
 
         return redirect()->route('admin.certifications.index');
     }
@@ -40,12 +44,17 @@ class CertificationsController extends Controller
     {
         abort_if(Gate::denies('certification_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.certifications.edit', compact('certification'));
+        $permissions = Permission::pluck('title', 'id');
+
+        $certification->load('permissions');
+
+        return view('admin.certifications.edit', compact('certification', 'permissions'));
     }
 
     public function update(UpdateCertificationRequest $request, Certification $certification)
     {
         $certification->update($request->all());
+        $certification->permissions()->sync($request->input('permissions', []));
 
         return redirect()->route('admin.certifications.index');
     }
@@ -53,6 +62,8 @@ class CertificationsController extends Controller
     public function show(Certification $certification)
     {
         abort_if(Gate::denies('certification_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $certification->load('permissions');
 
         return view('admin.certifications.show', compact('certification'));
     }

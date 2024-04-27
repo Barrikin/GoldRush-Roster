@@ -23,7 +23,7 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.rank.fields.id') }}
+                            {{ trans('cruds.rank.fields.rank_order') }}
                         </th>
                         <th>
                             {{ trans('cruds.rank.fields.title') }}
@@ -43,7 +43,7 @@
 
                             </td>
                             <td>
-                                {{ $rank->id ?? '' }}
+                                {{ $rank->rank_order ?? '' }}
                             </td>
                             <td>
                                 {{ $rank->title ?? '' }}
@@ -132,7 +132,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

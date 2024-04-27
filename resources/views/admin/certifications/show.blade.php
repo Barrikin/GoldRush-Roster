@@ -31,6 +31,16 @@
                             {{ $certification->name }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.certification.fields.permission') }}
+                        </th>
+                        <td>
+                            @foreach($certification->permissions as $key => $permission)
+                                <span class="label label-info">{{ $permission->title }}</span>
+                            @endforeach
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

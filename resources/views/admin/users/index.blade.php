@@ -32,6 +32,9 @@
                             {{ trans('cruds.user.fields.badge') }}
                         </th>
                         <th>
+                            {{ trans('cruds.user.fields.rank_order') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.user.fields.rank') }}
                         </th>
                         <th>
@@ -73,7 +76,10 @@
                                     {{ $user->badge ?? '' }}
                                 </a>
                             </td>
-                            <td><span hidden="hidden">{{ $user->rank?->id -1 ?? '' }}</span>
+                            <td>
+                                <span >{{ $user->rank?->rank_order ?? '' }}</span>
+                            </td>
+                            <td>
                                 <a href="{{ route('admin.users.show', $user->id) }}">
                                  {{ $user->rank->title ?? '' }}
                                 </a>
@@ -108,7 +114,7 @@
                                 @endcan
 
                                 @can('user_edit')
-                                        @if (Auth::user()->is_admin || $user->rank_id > Auth::user()->rank_id)
+                                        @if (Auth::user()->is_admin || $user->rank_order > Auth::user()->rank_id)
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
@@ -116,15 +122,29 @@
                                 @endcan
 
                                 @can('user_delete')
-                                    @if (Auth::user()->is_admin || $user->rank_id > Auth::user()->rank_id)
+                                    @if($user->trashed())
+                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: inline-block;">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="restore" value="true">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="submit" class="btn btn-xs btn-success" value="{{ trans('global.restore') }}">
+                                            </form>
+                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="force_delete" value="true">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.permadel') }}">
+                                            </form>
+                                        @else
+                                    @if (Auth::user()->is_admin || $user->rank_order > Auth::user()->rank_id)
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                         @endif
+                                        @endif
                                 @endcan
-
                             </td>
 
                         </tr>
@@ -143,11 +163,6 @@
 <script>
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        delete dtButtons[2]
-        delete dtButtons[3]
-        delete dtButtons[4]
-        delete dtButtons[5]
-        delete dtButtons[6]
 @can('user_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
@@ -183,7 +198,13 @@
     order: [[ 4, 'asc' ], [1, 'asc']],
     pageLength: 100,
   });
-  let table = $('.datatable-User:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  let table = $('.datatable-User:not(.ajaxTable)').DataTable({
+      buttons: dtButtons,
+      columnDefs: [
+          {targets: 4, visible: false},
+          {targets: 5, orderData: 4 },
+      ],
+  })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

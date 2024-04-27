@@ -2,8 +2,8 @@
 
 return [
     'userManagement' => [
-        'title'          => 'User management',
-        'title_singular' => 'User management',
+        'title'          => 'Administration',
+        'title_singular' => 'Administration',
     ],
     'permission' => [
         'title'          => 'Permissions',
@@ -80,6 +80,7 @@ return [
             'rank'                     => 'Rank',
             'rank_helper'              => ' ',
             'strike_points'            => 'Strike Points',
+            'rank_order'               => 'Rank Order'
         ],
     ],
     'auditLog' => [
@@ -180,6 +181,8 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'id_helper'         => ' ',
+            'permission'        => 'Permissions',
+            'permission_helper' => ' ',
             'name'              => 'Name',
             'name_helper'       => ' ',
             'created_at'        => 'Created at',
@@ -290,6 +293,8 @@ return [
         'fields'         => [
             'id'                 => 'ID',
             'id_helper'          => ' ',
+            'rank_order'         => 'Rank Order',
+            'rank_order_helper'  => ' ',
             'title'              => 'Title',
             'title_helper'       => ' ',
             'permissions'        => 'Permissions',

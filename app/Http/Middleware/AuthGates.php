@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Certification;
 use App\Models\Permission;
 use App\Models\Rank;
 use App\Models\Role;
@@ -20,6 +21,7 @@ class AuthGates
 
         $userRoles = $user->roles->pluck('id')->toArray();
         $userRanks = $user->rank()->pluck('id')->toArray();
+        $userCertifications = $user->certifications()->pluck('id')->toArray();
         $userPermissions = [];
 
         foreach ($userRoles as $userRole) {
@@ -31,6 +33,13 @@ class AuthGates
 
         foreach ($userRanks as $userRank) {
             $permissions = Rank::find($userRank)->permissions;
+            foreach ($permissions as $permission) {
+                $userPermissions[] = $permission->title;
+            }
+        }
+
+        foreach ($userCertifications as $userCertification) {
+            $permissions = Certification::find($userCertification)->permissions;
             foreach ($permissions as $permission) {
                 $userPermissions[] = $permission->title;
             }

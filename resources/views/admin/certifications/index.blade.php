@@ -29,6 +29,9 @@
                             {{ trans('cruds.certification.fields.name') }}
                         </th>
                         <th>
+                            {{ trans('cruds.certification.fields.permission') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -44,6 +47,11 @@
                             </td>
                             <td>
                                 {{ $certification->name ?? '' }}
+                            </td>
+                            <td>
+                                @foreach($certification->permissions as $key => $item)
+                                    <span class="badge badge-info">{{ $item->title }}</span>
+                                @endforeach
                             </td>
                             <td>
                                 @can('certification_show')

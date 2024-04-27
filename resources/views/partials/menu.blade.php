@@ -21,8 +21,8 @@
                     </a>
                 </li>
                 @can('user_management_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/permissions*") ? "menu-open" : "" }} {{ request()->is("admin/roles*") ? "menu-open" : "" }} {{ request()->is("admin/user-alerts*") ? "menu-open" : "" }} {{ request()->is("admin/audit-logs*") ? "menu-open" : "" }} {{ request()->is("admin/ranks*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/permissions*") ? "active" : "" }} {{ request()->is("admin/roles*") ? "active" : "" }} {{ request()->is("admin/user-alerts*") ? "active" : "" }} {{ request()->is("admin/audit-logs*") ? "active" : "" }} {{ request()->is("admin/ranks*") ? "active" : "" }}" href="#">
+                    <li class="nav-item has-treeview {{ request()->is("admin/permissions*") ? "menu-open" : "" }} {{ request()->is("admin/roles*") ? "menu-open" : "" }} {{ request()->is("admin/user-alerts*") ? "menu-open" : "" }} {{ request()->is("admin/certifications*") ? "menu-open" : "" }} {{ request()->is("admin/audit-logs*") ? "menu-open" : "" }} {{ request()->is("admin/ranks*") ? "menu-open" : "" }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/permissions*") ? "active" : "" }} {{ request()->is("admin/roles*") ? "active" : "" }} {{ request()->is("admin/certifications*") ? "active" : "" }} {{ request()->is("admin/user-alerts*") ? "active" : "" }} {{ request()->is("admin/audit-logs*") ? "active" : "" }} {{ request()->is("admin/ranks*") ? "active" : "" }}" href="#">
                             <i class="fa-fw nav-icon fas fa-users">
 
                             </i>
@@ -45,7 +45,7 @@
                                 </li>
                             @endcan
                             @can('role_access')
-                                <li class="nav-item">
+                            <!--    <li class="nav-item">
                                     <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "active" : "" }}">
                                         <i class="fa-fw nav-icon fas fa-briefcase">
 
@@ -54,7 +54,7 @@
                                             {{ trans('cruds.role.title') }}
                                         </p>
                                     </a>
-                                </li>
+                                </li>-->
                             @endcan
                             @can('rank_access')
                                 <li class="nav-item">
@@ -68,6 +68,18 @@
                                     </a>
                                 </li>
                             @endcan
+                                @can('certification_access')
+                                    <li class="nav-item">
+                                        <a href="{{ route("admin.certifications.index") }}" class="nav-link {{ request()->is("admin/certifications") || request()->is("admin/certifications/*") ? "active" : "" }}">
+                                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                                            </i>
+                                            <p>
+                                                {{ trans('cruds.certification.title') }}
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endcan
                             @can('user_alert_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.user-alerts.index") }}" class="nav-link {{ request()->is("admin/user-alerts") || request()->is("admin/user-alerts/*") ? "active" : "" }}">
@@ -96,8 +108,8 @@
                     </li>
                 @endcan
                 @can('police_department_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/users*") ? "menu-open" : "" }} {{ request()->is("admin/disciplinaries*") ? "menu-open" : "" }} {{ request()->is("admin/sops*") ? "menu-open" : "" }} {{ request()->is("admin/certifications*") ? "menu-open" : "" }} {{ request()->is("admin/comments*") ? "menu-open" : "" }} {{ request()->is("admin/*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/users*") ? "active" : "" }} {{ request()->is("admin/disciplinaries*") ? "active" : "" }} {{ request()->is("admin/sops*") ? "active" : "" }} {{ request()->is("admin/certifications*") ? "active" : "" }} {{ request()->is("admin/comments*") ? "active" : "" }} {{ request()->is("admin/*") ? "active" : "" }}" href="#">
+                    <li class="nav-item has-treeview {{ request()->is("admin/users*") ? "menu-open" : "" }} {{ request()->is("admin/disciplinaries*") ? "menu-open" : "" }} {{ request()->is("admin/sops*") ? "menu-open" : "" }} {{ request()->is("admin/comments*") ? "menu-open" : "" }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/users*") ? "active" : "" }} {{ request()->is("admin/disciplinaries*") ? "active" : "" }} {{ request()->is("admin/sops*") ? "active" : "" }} {{ request()->is("admin/comments*") ? "active" : "" }}" href="#">
                             <i class="fa-fw nav-icon fas fa-cogs">
 
                             </i>
@@ -139,18 +151,6 @@
                                         </i>
                                         <p>
                                             {{ trans('cruds.sop.title') }}
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('certification_access')
-                                <li class="nav-item">
-                                    <a href="{{ route("admin.certifications.index") }}" class="nav-link {{ request()->is("admin/certifications") || request()->is("admin/certifications/*") ? "active" : "" }}">
-                                        <i class="fa-fw nav-icon fas fa-cogs">
-
-                                        </i>
-                                        <p>
-                                            {{ trans('cruds.certification.title') }}
                                         </p>
                                     </a>
                                 </li>

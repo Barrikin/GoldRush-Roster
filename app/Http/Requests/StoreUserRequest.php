@@ -46,7 +46,7 @@ class StoreUserRequest extends FormRequest
                 'unique:users',
             ],
             'hired_on' => [
-                'required',
+                'nullable',
                 'date_format:' . config('panel.date_format'),
             ],
             'time_zone' => [
@@ -54,7 +54,6 @@ class StoreUserRequest extends FormRequest
                 'nullable',
             ],
             'password' => [
-                'required',
             ],
             'email' => [
                 'unique:users',

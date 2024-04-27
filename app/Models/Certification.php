@@ -30,4 +30,9 @@ class Certification extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
 }

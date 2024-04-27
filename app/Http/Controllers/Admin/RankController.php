@@ -44,7 +44,7 @@ class RankController extends Controller
     {
         abort_if(Gate::denies('rank_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $permissions = Permission::pluck('title', 'id');
+        $permissions = Permission::pluck('title', 'id', 'rank_order');
 
         $rank->load('permissions');
 

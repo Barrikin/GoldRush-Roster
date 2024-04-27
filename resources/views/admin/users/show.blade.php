@@ -39,7 +39,7 @@
                             {{ $user->badge }}
                         </td>
                     </tr>
-                    <tr>
+                   <!--<tr>
                         <th>
                             {{ trans('cruds.user.fields.roles') }}
                         </th>
@@ -48,13 +48,23 @@
                                 <span class="label label-info">{{ $roles->title }}</span>
                             @endforeach
                         </td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <th>
                             {{ trans('cruds.user.fields.rank') }}
                         </th>
                         <td>
                             {{ $user->rank->title ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.certifications') }}
+                        </th>
+                        <td>
+                            @foreach($user->certifications as $key => $item)
+                                <span class="badge badge-info">{{ $item->name }}</span>
+                            @endforeach
                         </td>
                     </tr>
                     <tr>
@@ -89,6 +99,7 @@
                             {{ $user->time_zone }}
                         </td>
                     </tr>
+                    @can('disciplinary_access')
                     <tr>
                         <th>
                             {{ trans('cruds.user.fields.strike_points') }}
@@ -97,16 +108,7 @@
                             {{ $user->strike_points }}
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.user.fields.certifications') }}
-                        </th>
-                        <td>
-                            @foreach($user->certifications as $key => $item)
-                                <span class="badge badge-info">{{ $item->name }}</span>
-                            @endforeach
-                        </td>
-                    </tr>
+                        #@endcan
                 </tbody>
             </table>
             <div class="form-group">
@@ -123,13 +125,13 @@
         {{ trans('global.relatedData') }}
     </div>
     <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
-        @can('disciplinary_access')
+        @if( Gate::allows('disciplinary_access') OR Auth::user()->id == $user->id )
         <li class="nav-item">
             <a class="nav-link" href="#officer_disciplinaries" role="tab" data-toggle="tab">
                 {{ trans('cruds.disciplinary.title') }}
             </a>
         </li>
-        @endcan
+        @endif
         @can('comment_access')
         <li class="nav-item">
             <a class="nav-link" href="#officer_comments" role="tab" data-toggle="tab">
@@ -137,23 +139,27 @@
             </a>
         </li>
             @endcan
-            @can('training_access')
+            @if( Gate::allows('training_access') OR Auth::user()->id == $user->id )
         <li class="nav-item">
             <a class="nav-link" href="#officer_trainings" role="tab" data-toggle="tab">
                 {{ trans('cruds.training.title') }}
             </a>
         </li>
-            @endcan
+            @endif
+            @if( Gate::allows('sop_sign_off_access') OR Auth::user()->id == $user->id )
         <li class="nav-item">
             <a class="nav-link" href="#officer_sop_sign_offs" role="tab" data-toggle="tab">
                 {{ trans('cruds.sopSignOff.title') }}
             </a>
         </li>
+            @endif
+            @if( Auth::user()->is_admin OR Auth::user()->id == $user->id )
         <li class="nav-item">
             <a class="nav-link" href="#user_user_alerts" role="tab" data-toggle="tab">
                 {{ trans('cruds.userAlert.title') }}
             </a>
         </li>
+                @endif
     </ul>
     <div class="tab-content">
         <div class="tab-pane" role="tabpanel" id="officer_disciplinaries">

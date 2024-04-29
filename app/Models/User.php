@@ -117,12 +117,12 @@ class User extends Authenticatable
 
     public function getHiredOnAttribute($value)
     {
-        return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
+        return $value ? Carbon::parse($value)->setTimezone($this->time_zone ?? config('app.timezone'))->format(config('panel.date_format')) : null;
     }
 
     public function setHiredOnAttribute($value)
     {
-        $this->attributes['hired_on'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
+        $this->attributes['hired_on'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->setTimezone(config('app.timezone'))->format('Y-m-d') : null;
     }
 
     public function setPasswordAttribute($input)

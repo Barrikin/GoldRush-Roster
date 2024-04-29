@@ -122,20 +122,22 @@ table {
 div.dataTables_info {
     color: white !important;
 }
-.cke_bottom {
-    background-image: none !important;
-    background: #333 !important;
-    border-top: 1px solid #333 !important;
-    box-shadow: none !important;
+.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+    border-color: #6c757d !important;
 }
-
-.cke_path_item {
-    color: #fff !important;
-    text-shadow: none !important;
+:root {
+    --ck-color-text: #84FFF7 !important;
 }
-
-a.cke_path_item:hover {
-    background: #666 !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
+.ck-reset_all :not(.ck-reset_all-excluded *), .ck.ck-reset, .ck.ck-reset_all {
+    background: #343a40 !important;
+}
+.ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+    border: solid #6c757d !important;
+    border-width: 1px 1px 0 !important;
+}
+.ck.ck-toolbar .ck.ck-toolbar__separator {
+    background: #6c757d !important;
+}
+.ck.ck-editor__main>.ck-editor__editable {
+    background: #343a40 !important;
 }

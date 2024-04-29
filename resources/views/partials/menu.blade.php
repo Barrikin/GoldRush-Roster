@@ -116,8 +116,8 @@
                     </li>
                 @endcan
                 @can('police_department_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/users*") ? "menu-open" : "" }} {{ request()->is("admin/disciplinaries*") ? "menu-open" : "" }} {{ request()->is("admin/sops*") ? "menu-open" : "" }} {{ request()->is("admin/comments*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/users*") ? "active" : "" }} {{ request()->is("admin/disciplinaries*") ? "active" : "" }} {{ request()->is("admin/sops*") ? "active" : "" }} {{ request()->is("admin/comments*") ? "active" : "" }}"
+                    <li class="nav-item has-treeview {{ request()->is("admin/users*") ? "menu-open" : "" }} {{ request()->is("admin/disciplinaries*") ? "menu-open" : "" }} {{ request()->is("admin/sops*") ? "menu-open" : "" }} {{ request()->is("admin/comments*") ? "menu-open" : "" }} {{ request()->is("admin/courses*") ? "menu-open" : "" }} {{ request()->is("admin/trainings*") ? "menu-open" : "" }} {{ request()->is("admin/sop-sign-offs*") ? "menu-open" : "" }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/users*") ? "active" : "" }} {{ request()->is("admin/disciplinaries*") ? "active" : "" }} {{ request()->is("admin/sops*") ? "active" : "" }} {{ request()->is("admin/comments*") ? "active" : "" }} {{ request()->is("admin/courses*") ? "active" : "" }} {{ request()->is("admin/trainings*") ? "active" : "" }} {{ request()->is("admin/sop-sign-offs*") ? "active" : "" }}"
                            href="#">
                             <i class="fa-fw nav-icon fas fa-cogs">
 
@@ -181,59 +181,45 @@
                                 </li>
                             @endcan
                             @can('fto_access')
-                                <li class="nav-item has-treeview {{ request()->is("admin/courses*") ? "menu-open" : "" }} {{ request()->is("admin/trainings*") ? "menu-open" : "" }} {{ request()->is("admin/sop-sign-offs*") ? "menu-open" : "" }}">
-                                    <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/courses*") ? "active" : "" }} {{ request()->is("admin/trainings*") ? "active" : "" }} {{ request()->is("admin/sop-sign-offs*") ? "active" : "" }}"
-                                       href="#">
-                                        <i class="fa-fw nav-icon fas fa-cogs">
+                                    @can('course_access')
+                                        <li class="nav-item">
+                                            <a href="{{ route("admin.courses.index") }}"
+                                               class="nav-link {{ request()->is("admin/courses") || request()->is("admin/courses/*") ? "active" : "" }}">
+                                                <i class="fa-fw nav-icon fas fa-cogs">
 
-                                        </i>
-                                        <p>
-                                            {{ trans('cruds.fto.title') }}
-                                            <i class="right fa fa-fw fa-angle-left nav-icon"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        @can('course_access')
-                                            <li class="nav-item">
-                                                <a href="{{ route("admin.courses.index") }}"
-                                                   class="nav-link {{ request()->is("admin/courses") || request()->is("admin/courses/*") ? "active" : "" }}">
-                                                    <i class="fa-fw nav-icon fas fa-cogs">
+                                                </i>
+                                                <p>
+                                                    {{ trans('cruds.course.title') }}
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('training_access')
+                                        <li class="nav-item">
+                                            <a href="{{ route("admin.trainings.index") }}"
+                                               class="nav-link {{ request()->is("admin/trainings") || request()->is("admin/trainings/*") ? "active" : "" }}">
+                                                <i class="fa-fw nav-icon fas fa-cogs">
 
-                                                    </i>
-                                                    <p>
-                                                        {{ trans('cruds.course.title') }}
-                                                    </p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('training_access')
-                                            <li class="nav-item">
-                                                <a href="{{ route("admin.trainings.index") }}"
-                                                   class="nav-link {{ request()->is("admin/trainings") || request()->is("admin/trainings/*") ? "active" : "" }}">
-                                                    <i class="fa-fw nav-icon fas fa-cogs">
+                                                </i>
+                                                <p>
+                                                    {{ trans('cruds.training.title') }}
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sop_sign_off_access')
+                                        <li class="nav-item">
+                                            <a href="{{ route("admin.sop-sign-offs.index") }}"
+                                               class="nav-link {{ request()->is("admin/sop-sign-offs") || request()->is("admin/sop-sign-offs/*") ? "active" : "" }}">
+                                                <i class="fa-fw nav-icon fas fa-cogs">
 
-                                                    </i>
-                                                    <p>
-                                                        {{ trans('cruds.training.title') }}
-                                                    </p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('sop_sign_off_access')
-                                            <li class="nav-item">
-                                                <a href="{{ route("admin.sop-sign-offs.index") }}"
-                                                   class="nav-link {{ request()->is("admin/sop-sign-offs") || request()->is("admin/sop-sign-offs/*") ? "active" : "" }}">
-                                                    <i class="fa-fw nav-icon fas fa-cogs">
-
-                                                    </i>
-                                                    <p>
-                                                        {{ trans('cruds.sopSignOff.title') }}
-                                                    </p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                    </ul>
-                                </li>
+                                                </i>
+                                                <p>
+                                                    {{ trans('cruds.sopSignOff.title') }}
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
                             @endcan
                         </ul>
                     </li>

@@ -43,7 +43,7 @@ class UsersController extends Controller
 
         $certifications = Certification::pluck('name', 'id');
 
-        if (Auth::user()->isAdmin()) {
+        if (Auth::user()->isAdministrator()) {
             $ranks = Rank::orderBy('rank_order')->pluck('title', 'id');
         }
         else {
@@ -127,6 +127,35 @@ class UsersController extends Controller
             abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
         }
 
+        if ($request->delete_type == 'resignation') {
+            $user->update([
+                'call_sign' => 'DELETED-' . Str::uuid(),
+                'badge'     => 'DELETED-' . Str::uuid(),
+                'status'    => 4,
+                'password'  => Str::uuid(),
+            ]);
+            Comment::create([
+                'officer_id'    => $user->id,
+                'author_id'     => Auth::user()->id,
+                'comment'       => 'Resigned: ' . $request->delete_reason,
+            ]);
+        }
+        elseif ($request->delete_type == 'termination') {
+            $user->update([
+                'call_sign' => 'DELETED-' . Str::uuid(),
+                'badge'     => 'DELETED-' . Str::uuid(),
+                'status'    => 5,
+                'password'  => Str::uuid(),
+            ]);
+            Comment::create([
+                'officer_id'    => $user->id,
+                'author_id'     => Auth::user()->id,
+                'comment'       => 'Terminated: ' . $request->delete_reason,
+            ]);
+        }
+        else {
+
+        }
 
         $user->delete();
 
@@ -134,7 +163,7 @@ class UsersController extends Controller
     }
 
     public function restore(Request $request) {
-
+        User::withTrashed()->findOrFail($request->post()['user_id'])->restore();
 
         return redirect()->route('admin.users.index');
     }

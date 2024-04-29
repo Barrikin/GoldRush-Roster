@@ -28,18 +28,25 @@
         @endcan
     @else
         @if (Gate::allows('administrator') || Auth::user()->rank->rank_order < $model->rank->rank_order)
-            <form action="{{ route($crudName.'destroy', $model->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+            <form action="{{ route($crudName.'destroy', $model->id) }}" method="POST" onsubmit="delete_submit('resignation', {{$user->id}}); return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                 <input type="hidden" name="_method" value="DELETE">
-                <input type="hidden" name="delete_type" value="resigned">
+                <input type="hidden" name="delete_type" value="resignation">
+                <input type="hidden" id="resignation{{$user->id}}" name="delete_reason" value="test">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.resigned') }}">
             </form>
-            <form action="{{ route($crudName.'destroy', $model->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+            <form action="{{ route($crudName.'destroy', $model->id) }}" method="POST" onsubmit="delete_submit('termination', {{$user->id}}); return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                 <input type="hidden" name="_method" value="DELETE">
-                <input type="hidden" name="delete_type" value="terminated">
+                <input type="hidden" name="delete_type" value="termination">
+                <input type="hidden" id="termination{{$user->id}}" name="delete_reason" value="">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.terminate') }}">
             </form>
         @endif
     @endif
 @endcan
+<script>
+    function delete_submit(type, id) {
+        document.getElementById(type+id).value = prompt("Reason for "+type+"?");
+    }
+</script>

@@ -25,7 +25,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('users/restore', 'UsersController@restore')->name('users.restore')->withTrashed();
     Route::post('users/forcedestroy', 'UsersController@forceDestroy')->name('users.forcedestroy')->withTrashed();
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
-    Route::resource('users', 'UsersController');
+    Route::resource('users', 'UsersController')->withTrashed();
 
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
@@ -55,8 +55,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('comments/destroy', 'CommentsController@massDestroy')->name('comments.massDestroy');
     Route::post('comments/media', 'CommentsController@storeMedia')->name('comments.storeMedia');
     Route::post('comments/ckmedia', 'CommentsController@storeCKEditorImages')->name('comments.storeCKEditorImages');
-    Route::resource('users.comments', 'CommentsController');
-    Route::resource('comments', 'CommentsController');
+    Route::resource('users.comments', 'CommentsController')->withTrashed();
+    Route::resource('comments', 'CommentsController')->withTrashed();
 
     // Course
     Route::delete('courses/destroy', 'CourseController@massDestroy')->name('courses.massDestroy');

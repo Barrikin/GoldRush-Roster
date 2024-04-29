@@ -139,7 +139,6 @@
                 {targets: 4, orderData: 3},
                 @endif
             )
-            console.log(dtColumns)
             $.extend(true, $.fn.dataTable.defaults, {
                 orderCellsTop: true,
                 @if( Gate::allows('table.select.multiple') )

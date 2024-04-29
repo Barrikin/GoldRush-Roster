@@ -141,3 +141,13 @@ div.dataTables_info {
 .ck.ck-editor__main>.ck-editor__editable {
     background: #343a40 !important;
 }
+.page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #007bff;
+    background-color: #343a40;
+    border: 1px solid #dee2e6;
+}

@@ -47,7 +47,7 @@ class UsersController extends Controller
             $ranks = Rank::orderBy('rank_order')->pluck('title', 'id');
         }
         else {
-            $ranks = Rank::where('id', '>', Auth::user()->rank_id)->orderBy('rank_order')->pluck('title', 'id');
+            $ranks = Rank::where('rank_order', '>', Auth::user()->rank->rank_order)->orderBy('rank_order')->pluck('title', 'id');
         }
 
         return view('admin.users.create', compact('certifications', 'ranks', 'roles'));
@@ -56,9 +56,12 @@ class UsersController extends Controller
     public function store(StoreUserRequest $request)
     {
         $input = $request->all();
+
         if ($request->hired_on == '') { $input['hired_on'] = Carbon::now()->format('Y-m-d'); }
+
         $input['password'] = $request->phone_number;
         $input['change_password'] = true;
+
         $user = User::create($input);
         $user->roles()->sync($request->input('roles', []));
         $user->certifications()->sync($request->input('certifications', []));
@@ -70,21 +73,20 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if (! Auth::user()->isAdmin()) {
-            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (! Auth::user()->isAdministrator()) {
+            abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
         }
 
         $roles = Role::pluck('title', 'id');
 
         $certifications = Certification::pluck('name', 'id');
 
-        if (Auth::user()->isAdmin()) {
+        if (Auth::user()->isAdministrator()) {
             $ranks = Rank::orderBy('rank_order')->pluck('title', 'id');
         }
         else {
-            $ranks = Rank::where('id', '>', Auth::user()->rank_id)->orderBy('rank_order')->pluck('title', 'id');
+            $ranks = Rank::where('rank_order', '>', Auth::user()->rank->rank_order)->orderBy('rank_order')->pluck('title', 'id');
         }
-
 
         $user->load('roles', 'certifications', 'rank');
 
@@ -93,12 +95,15 @@ class UsersController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        if (! Auth::user()->isAdmin()) {
-            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
-            abort_if($request->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (! Auth::user()->isAdministrator()) {
+            abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
+            abort_if(Auth::user()->rank->rank_order >= $request->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
         }
 
+        if ($request->password != '') { $request->change_password = true; }
+
         $user->update($request->all());
+
         $user->roles()->sync($request->input('roles', []));
         $user->certifications()->sync($request->input('certifications', []));
 
@@ -118,8 +123,8 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if (! Auth::user()->isAdmin()) {
-            abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (! Auth::user()->isAdministrator()) {
+            abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
         }
 
 
@@ -145,8 +150,8 @@ class UsersController extends Controller
         $users = User::find(request('ids'));
 
         foreach ($users as $user) {
-            if (! Auth::user()->isAdmin()) {
-                abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
+            if (! Auth::user()->isAdministrator()) {
+                abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
             }
 
             $user->delete();

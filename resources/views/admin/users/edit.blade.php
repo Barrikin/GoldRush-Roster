@@ -46,6 +46,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.rank_helper') }}</span>
             </div>
+            @can('administrator')
             <div class="form-group">
                 <label for="roles">{{ trans('cruds.user.fields.roles') }}</label>
                 <div style="padding-bottom: 4px">
@@ -62,6 +63,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.roles_helper') }}</span>
             </div>
+            @endcan
             <div class="form-group">
                 <label for="certifications">{{ trans('cruds.user.fields.certifications') }}</label>
                 <div style="padding-bottom: 4px">

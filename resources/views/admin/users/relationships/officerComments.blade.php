@@ -2,7 +2,7 @@
     @can('comment_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.comments.create') }}">
+                <a class="btn btn-success" href="{{ route('admin.users.comments.create', $user->id) }}">
                     {{ trans('global.add') }} {{ trans('cruds.comment.title_singular') }}
                 </a>
             </div>
@@ -31,6 +31,9 @@
                                 {{ trans('cruds.comment.fields.author') }}
                             </th>
                             <th>
+                                {{ trans('cruds.comment.fields.comment') }}
+                            </th>
+                            <th>
                                 &nbsp;
                             </th>
                         </tr>
@@ -49,6 +52,9 @@
                                 </td>
                                 <td>
                                     {{ $comment->author->name ?? '' }}
+                                </td>
+                                <td>
+                                    {!! $comment->comment ?? '' !!}
                                 </td>
                                 <td>
                                     @can('comment_show')
@@ -126,7 +132,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

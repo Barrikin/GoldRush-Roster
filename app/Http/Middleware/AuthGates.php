@@ -6,6 +6,7 @@ use App\Models\Certification;
 use App\Models\Permission;
 use App\Models\Rank;
 use App\Models\Role;
+use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\Gate;
 
@@ -48,10 +49,13 @@ class AuthGates
         $permissionsArray = Permission::pluck('id', 'title')->toArray();
         foreach ($permissionsArray as $title => $id) {
             Gate::define($title, function ($user) use ($userPermissions, $title) {
-                if ($user->is_admin) { return true; }
                 return in_array($title, $userPermissions);
             });
         }
+
+        Gate::before(function (User $user, string $ability) use ($userPermissions) {
+           if ($user->isAdministrator() || in_array('administrator', $userPermissions)) { return true; }
+        });
 
         return $next($request);
     }

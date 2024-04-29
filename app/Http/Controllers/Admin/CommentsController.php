@@ -27,13 +27,13 @@ class CommentsController extends Controller
         return view('admin.comments.index', compact('comments'));
     }
 
-    public function create()
+    public function create($user_id)
     {
         abort_if(Gate::denies('comment_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $officers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $officers = User::where('id', $user_id)->pluck('name', 'id');
 
-        $authors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $authors = User::pluck('name', 'id');
 
         return view('admin.comments.create', compact('authors', 'officers'));
     }
@@ -46,7 +46,7 @@ class CommentsController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $comment->id]);
         }
 
-        return redirect()->route('admin.comments.index');
+        return redirect()->route('admin.users.show', $request->officer_id);
     }
 
     public function edit(Comment $comment)

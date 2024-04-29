@@ -39,22 +39,22 @@
                             {{ $user->badge }}
                         </td>
                     </tr>
-                   <!--<tr>
-                        <th>
-                            {{ trans('cruds.user.fields.roles') }}
-                        </th>
-                        <td>
-                            @foreach($user->roles as $key => $roles)
-                                <span class="label label-info">{{ $roles->title }}</span>
-                            @endforeach
-                        </td>
-                    </tr>-->
-                    <tr>
+                                       <tr>
                         <th>
                             {{ trans('cruds.user.fields.rank') }}
                         </th>
                         <td>
                             {{ $user->rank->title ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.roles') }}
+                        </th>
+                        <td>
+                            @foreach($user->roles as $key => $roles)
+                                <span class="badge badge-info">{{ $roles->title }}</span>
+                            @endforeach
                         </td>
                     </tr>
                     <tr>
@@ -108,7 +108,7 @@
                             {{ $user->strike_points }}
                         </td>
                     </tr>
-                        #@endcan
+                        @endcan
                 </tbody>
             </table>
             <div class="form-group">

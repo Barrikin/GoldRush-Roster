@@ -34,7 +34,19 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.badge_helper') }}</span>
             </div>
-            <!--<div class="form-group">
+            <div class="form-group">
+                <label class="required" for="rank_id">{{ trans('cruds.user.fields.rank') }}</label>
+                <select class="form-control select2 {{ $errors->has('rank') ? 'is-invalid' : '' }}" name="rank_id" id="rank_id" required>
+                    @foreach($ranks as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('rank_id') ? old('rank_id') : $user->rank->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('rank'))
+                    <span class="text-danger">{{ $errors->first('rank') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.rank_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="roles">{{ trans('cruds.user.fields.roles') }}</label>
                 <div style="padding-bottom: 4px">
                     <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
@@ -49,18 +61,6 @@
                     <span class="text-danger">{{ $errors->first('roles') }}</span>
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.roles_helper') }}</span>
-            </div>-->
-            <div class="form-group">
-                <label class="required" for="rank_id">{{ trans('cruds.user.fields.rank') }}</label>
-                <select class="form-control select2 {{ $errors->has('rank') ? 'is-invalid' : '' }}" name="rank_id" id="rank_id" required>
-                    @foreach($ranks as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('rank_id') ? old('rank_id') : $user->rank->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('rank'))
-                    <span class="text-danger">{{ $errors->first('rank') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.user.fields.rank_helper') }}</span>
             </div>
             <div class="form-group">
                 <label for="certifications">{{ trans('cruds.user.fields.certifications') }}</label>
@@ -116,7 +116,7 @@
                 <span class="help-block">{{ trans('cruds.user.fields.time_zone_helper') }}</span>
             </div>
 
-@if(Auth::user()->is_admin)
+@can('administrator')
     <div class="form-group">
         <label class="required" for="password">{{ trans('cruds.user.fields.password') }}</label>
         <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password" name="password" id="password">
@@ -125,7 +125,7 @@
         @endif
         <span class="help-block">{{ trans('cruds.user.fields.password_helper') }}</span>
     </div>
-    @endif
+    @endcan
 <div class="form-group">
     <button class="btn btn-danger" type="submit">
         {{ trans('global.save') }}

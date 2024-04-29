@@ -25,7 +25,7 @@
                 <label class="required" for="author_id">{{ trans('cruds.comment.fields.author') }}</label>
                 <select class="form-control select2 {{ $errors->has('author') ? 'is-invalid' : '' }}" name="author_id" id="author_id" required>
                     @foreach($authors as $id => $entry)
-                        <option value="{{ $id }}" {{ old('author_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                        <option value="{{ $id }}" {{ Auth::user()->id == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
                 </select>
                 @if($errors->has('author'))

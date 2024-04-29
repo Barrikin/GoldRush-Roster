@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Certification;
+use App\Models\Comment;
 use App\Models\Rank;
 use App\Models\Role;
 use App\Models\User;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -28,8 +30,9 @@ class UsersController extends Controller
         else {
             $users = User::with(['roles', 'certifications', 'rank'])->get();
         }
-
-        return view('admin.users.index', compact('users'));
+        $crudName = 'admin.users.';
+        $gateName = 'user_';
+        return view('admin.users.index', compact('users', 'crudName', 'gateName'));
     }
 
     public function create()
@@ -119,17 +122,22 @@ class UsersController extends Controller
             abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
         }
 
-        if ($request->force_delete) {
-            $user->forceDelete();
-        }
-        else if ($request->restore) {
-            $user->forceDelete();
-        }
-        else {
-            $user->delete();
-        }
+
+        $user->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+
+
+        return redirect()->route('admin.users.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        User::withTrashed()->findOrFail($request->post()['user_id'])->forceDelete();
+
+        return redirect()->route('admin.users.index');
     }
 
     public function massDestroy(MassDestroyUserRequest $request)
@@ -140,6 +148,7 @@ class UsersController extends Controller
             if (! Auth::user()->isAdmin()) {
                 abort_if($user->rank_id <= Auth::user()->rank_id, Response::HTTP_FORBIDDEN, '403 Forbidden');
             }
+
             $user->delete();
         }
 

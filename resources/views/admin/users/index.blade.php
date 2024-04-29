@@ -144,7 +144,7 @@
                 @if( Gate::allows('table.select.multiple') )
                 order: [[5, 'asc'], [1, 'asc']],
                 @else
-                order: [[4, 'asc'], [1, 'asc']],
+                order: [[4, 'asc'], [0, 'asc']],
                 @endif
                 pageLength: 100,
             });

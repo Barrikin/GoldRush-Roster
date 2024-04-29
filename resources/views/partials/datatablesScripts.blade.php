@@ -115,7 +115,7 @@
                     }
                 },
                     @endcan
-                    @can($gateName.'delete')
+                    @can('table.delete.multiple')
                 {
                     text: '{{ trans('global.datatables.delete') }}',
                     url: "{{ route($crudName.'massDestroy') }}",

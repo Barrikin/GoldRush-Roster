@@ -111,7 +111,10 @@
             </div>
             <div class="form-group">
                 <label for="time_zone">{{ trans('cruds.user.fields.time_zone') }}</label>
-                <input class="form-control {{ $errors->has('time_zone') ? 'is-invalid' : '' }}" type="text" name="time_zone" id="time_zone" value="{{ old('time_zone', $user->time_zone) }}">
+                {!! Timezonelist::toSelectBox('time_zone', old('time_zone', $user->time_zone), [
+                        'class' => "form-control {{ $errors->has('time_zone') ? 'is-invalid' : '' }}",
+                        'id'    => "time_zone",
+                    ]) !!}
                 @if($errors->has('time_zone'))
                     <span class="text-danger">{{ $errors->first('time_zone') }}</span>
                 @endif

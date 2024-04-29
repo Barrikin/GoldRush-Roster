@@ -73,7 +73,7 @@ return [
             'phone_number_helper'      => ' ',
             'hired_on'                 => 'Hired On',
             'hired_on_helper'          => ' ',
-            'time_zone'                => 'GMT',
+            'time_zone'                => 'Timezone',
             'time_zone_helper'         => ' ',
             'certifications'           => 'Certifications',
             'certifications_helper'    => ' ',

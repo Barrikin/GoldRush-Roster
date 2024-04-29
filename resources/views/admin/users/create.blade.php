@@ -127,7 +127,7 @@
                 </div>
                 <div class="form-group">
                     <label for="time_zone">{{ trans('cruds.user.fields.time_zone') }}</label>
-                    {!! \Jackiedo\Timezonelist\Timezonelist::toSelectBox('time_zone', old('time_zone', ''), [
+                    {!! Timezonelist::toSelectBox('time_zone', old('time_zone', ''), [
                         'class' => "form-control {{ $errors->has('time_zone') ? 'is-invalid' : '' }}",
                         'id'    => "time_zone",
                     ]) !!}

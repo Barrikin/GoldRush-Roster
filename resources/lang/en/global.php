@@ -322,5 +322,7 @@ return [
     'leave'                          => 'Leave',
     'calendar'                       => 'Calendar',
     'messenger'                      => 'Messenger',
+    'resigned'                       => 'Resigned',
+    'terminate'                     => 'Terminate'
 
 ];

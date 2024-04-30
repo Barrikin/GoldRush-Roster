@@ -54,17 +54,17 @@ class Training extends Model implements HasMedia
 
     public function officer()
     {
-        return $this->belongsTo(User::class, 'officer_id');
+        return $this->belongsTo(User::class, 'officer_id')->withTrashed();
     }
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsTo(Course::class, 'course_id')->withTrashed();
     }
 
     public function understood_fto()
     {
-        return $this->belongsTo(User::class, 'understood_fto_id');
+        return $this->belongsTo(User::class, 'understood_fto_id')->withTrashed();
     }
 
     public function getUnderstoodAtAttribute($value)
@@ -79,7 +79,7 @@ class Training extends Model implements HasMedia
 
     public function executed_fto()
     {
-        return $this->belongsTo(User::class, 'executed_fto_id');
+        return $this->belongsTo(User::class, 'executed_fto_id')->withTrashed();
     }
 
     public function getExecutedAtAttribute($value)

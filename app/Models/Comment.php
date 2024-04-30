@@ -45,11 +45,11 @@ class Comment extends Model implements HasMedia
 
     public function officer()
     {
-        return $this->belongsTo(User::class, 'officer_id');
+        return $this->belongsTo(User::class, 'officer_id')->withTrashed();
     }
 
     public function author()
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, 'author_id')->withTrashed();
     }
 }

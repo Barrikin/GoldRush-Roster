@@ -25,7 +25,10 @@ class TrainingController extends Controller
 
         $trainings = Training::with(['officer', 'course', 'understood_fto', 'executed_fto'])->get();
 
-        return view('admin.trainings.index', compact('trainings'));
+        $pageName = 'training';
+        $crudName = 'admin.trainings.';
+        $gateName = 'training_';
+        return view('admin.trainings.index', compact('trainings', 'pageName', 'crudName', 'gateName'));
     }
 
     public function create()

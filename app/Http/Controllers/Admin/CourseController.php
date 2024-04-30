@@ -23,7 +23,10 @@ class CourseController extends Controller
 
         $courses = Course::all();
 
-        return view('admin.courses.index', compact('courses'));
+        $pageName = 'course';
+        $crudName = 'admin.courses.';
+        $gateName = 'course_';
+        return view('admin.courses.index', compact('courses', 'pageName', 'crudName', 'gateName'));
     }
 
     public function create()

@@ -24,7 +24,10 @@ class SopController extends Controller
 
         $sops = Sop::with(['ranks'])->get();
 
-        return view('admin.sops.index', compact('sops'));
+        $pageName = 'sop';
+        $crudName = 'admin.sops.';
+        $gateName = 'sop_';
+        return view('admin.sops.index', compact('sops', 'pageName', 'crudName', 'gateName'));
     }
 
     public function create()

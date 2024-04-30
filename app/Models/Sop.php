@@ -44,6 +44,6 @@ class Sop extends Model implements HasMedia
 
     public function ranks()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class)->withTrashed();
     }
 }

@@ -30,9 +30,10 @@ class UsersController extends Controller
         else {
             $users = User::with(['roles', 'certifications', 'rank'])->get();
         }
+        $pageName = 'user';
         $crudName = 'admin.users.';
         $gateName = 'user_';
-        return view('admin.users.index', compact('users', 'crudName', 'gateName'));
+        return view('admin.users.index', compact('users', 'pageName', 'crudName', 'gateName'));
     }
 
     public function create()

@@ -16,7 +16,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class=" table table-bordered table-striped table-hover datatable datatable-User">
+                <table class=" table table-bordered table-striped table-hover datatable datatable-{{$pageName}}">
                     <thead>
                     <tr>
                         @can('table.select.multiple')
@@ -148,7 +148,7 @@
                 @endif
                 pageLength: 100,
             });
-            let table = $('.datatable-User:not(.ajaxTable)').DataTable({
+            let table = $('.datatable-{{$pageName}}:not(.ajaxTable)').DataTable({
                 buttons: dtButtons,
                 columnDefs: dtColumns,
             })

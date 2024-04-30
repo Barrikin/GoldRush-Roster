@@ -50,12 +50,12 @@ class Disciplinary extends Model implements HasMedia
 
     public function officer()
     {
-        return $this->belongsTo(User::class, 'officer_id');
+        return $this->belongsTo(User::class, 'officer_id')->withTrashed();
     }
 
     public function issued_by()
     {
-        return $this->belongsTo(User::class, 'issued_by_id');
+        return $this->belongsTo(User::class, 'issued_by_id')->withTrashed();
     }
 
     public function getExpireAtAttribute($value)

@@ -24,7 +24,10 @@ class DisciplinaryController extends Controller
 
         $disciplinaries = Disciplinary::with(['officer', 'issued_by'])->get();
 
-        return view('admin.disciplinaries.index', compact('disciplinaries'));
+        $pageName = 'disciplinary';
+        $crudName = 'admin.disciplinaries.';
+        $gateName = 'disciplinary_';
+        return view('admin.disciplinaries.index', compact('disciplinaries', 'pageName', 'crudName', 'gateName'));
     }
 
     public function create()

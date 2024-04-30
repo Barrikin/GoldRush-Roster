@@ -21,7 +21,10 @@ class SopSignOffsController extends Controller
 
         $sopSignOffs = SopSignOff::with(['officer', 'sop'])->get();
 
-        return view('admin.sopSignOffs.index', compact('sopSignOffs'));
+        $pageName = 'SopSignOff';
+        $crudName = 'admin.sop-sign-offs.';
+        $gateName = 'sop_sign_off_';
+        return view('admin.sopSignOffs.index', compact('sopSignOffs', 'pageName', 'crudName', 'gateName'));
     }
 
     public function create()

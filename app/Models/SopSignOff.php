@@ -38,12 +38,12 @@ class SopSignOff extends Model
 
     public function officer()
     {
-        return $this->belongsTo(User::class, 'officer_id');
+        return $this->belongsTo(User::class, 'officer_id')->withTrashed();
     }
 
     public function sop()
     {
-        return $this->belongsTo(Sop::class, 'sop_id');
+        return $this->belongsTo(Sop::class, 'sop_id')->withTrashed();
     }
 
     public function getSignedOffAtAttribute($value)

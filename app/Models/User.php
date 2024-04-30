@@ -87,22 +87,22 @@ class User extends Authenticatable
 
     public function officerDisciplinaries()
     {
-        return $this->hasMany(Disciplinary::class, 'officer_id', 'id');
+        return $this->hasMany(Disciplinary::class, 'officer_id', 'id')->withTrashed();
     }
 
     public function officerComments()
     {
-        return $this->hasMany(Comment::class, 'officer_id', 'id');
+        return $this->hasMany(Comment::class, 'officer_id', 'id')->withTrashed();
     }
 
     public function officerTrainings()
     {
-        return $this->hasMany(Training::class, 'officer_id', 'id');
+        return $this->hasMany(Training::class, 'officer_id', 'id')->withTrashed();
     }
 
     public function officerSopSignOffs()
     {
-        return $this->hasMany(SopSignOff::class, 'officer_id', 'id');
+        return $this->hasMany(SopSignOff::class, 'officer_id', 'id')->withTrashed();
     }
 
     public function userUserAlerts()
@@ -112,7 +112,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class)->withTrashed();
     }
 
     public function getHiredOnAttribute($value)
@@ -149,11 +149,11 @@ class User extends Authenticatable
 
     public function certifications()
     {
-        return $this->belongsToMany(Certification::class);
+        return $this->belongsToMany(Certification::class)->withTrashed();
     }
 
     public function rank()
     {
-        return $this->belongsTo(Rank::class, 'rank_id');
+        return $this->belongsTo(Rank::class, 'rank_id')->withTrashed();
     }
 }

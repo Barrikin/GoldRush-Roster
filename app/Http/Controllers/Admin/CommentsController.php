@@ -24,7 +24,10 @@ class CommentsController extends Controller
 
         $comments = Comment::with(['officer', 'author'])->get();
 
-        return view('admin.comments.index', compact('comments'));
+        $pageName = 'comment';
+        $crudName = 'admin.comments.';
+        $gateName = 'comment_';
+        return view('admin.comments.index', compact('comments', 'pageName', 'crudName', 'gateName'));
     }
 
     public function create($user_id)

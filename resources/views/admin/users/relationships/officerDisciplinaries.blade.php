@@ -15,18 +15,14 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class=" table table-bordered table-striped table-hover datatable datatable-officerDisciplinaries">
+                <table class=" table table-bordered table-striped table-hover datatable datatable-{{$pageName}}">
                     <thead>
                         <tr>
-                            <th width="10">
+                            @can('table.select.multiple')
+                                <th width="10">
 
-                            </th>
-                            <th>
-                                {{ trans('cruds.disciplinary.fields.id') }}
-                            </th>
-                            <th>
-                                {{ trans('cruds.disciplinary.fields.officer') }}
-                            </th>
+                                </th>
+                            @endcan
                             <th>
                                 {{ trans('cruds.disciplinary.fields.title') }}
                             </th>
@@ -47,15 +43,11 @@
                     <tbody>
                         @foreach($disciplinaries as $key => $disciplinary)
                             <tr data-entry-id="{{ $disciplinary->id }}">
-                                <td>
+                                @can('table.select.multiple')
+                                    <td>
 
-                                </td>
-                                <td>
-                                    {{ $disciplinary->id ?? '' }}
-                                </td>
-                                <td>
-                                    {{ $disciplinary->officer->name ?? '' }}
-                                </td>
+                                    </td>
+                                @endcan
                                 <td>
                                     {{ $disciplinary->title ?? '' }}
                                 </td>
@@ -69,26 +61,7 @@
                                     {{ $disciplinary->expire_at ?? '' }}
                                 </td>
                                 <td>
-                                    @can('disciplinary_show')
-                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.disciplinaries.show', $disciplinary->id) }}">
-                                            {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
-
-                                    @can('disciplinary_edit')
-                                        <a class="btn btn-xs btn-info" href="{{ route('admin.disciplinaries.edit', $disciplinary->id) }}">
-                                            {{ trans('global.edit') }}
-                                        </a>
-                                    @endcan
-
-                                    @can('disciplinary_delete')
-                                        <form action="{{ route('admin.disciplinaries.destroy', $disciplinary->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                            <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                        </form>
-                                    @endcan
-
+                                    @include('partials.datatablesActions', ['model' => $disciplinary])
                                 </td>
 
                             </tr>
@@ -101,51 +74,30 @@
 </div>
 @section('scripts')
 @parent
+@include('partials.datatablesScripts')
 <script>
     $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('disciplinary_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-  let deleteButton = {
-    text: deleteButtonTrans,
-    url: "{{ route('admin.disciplinaries.massDestroy') }}",
-    className: 'btn-danger',
-    action: function (e, dt, node, config) {
-      var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
-          return $(entry).data('entry-id')
-      });
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+        let dtColumns = $.extend(true, [], $.fn.dataTable.defaults.columnDefs)
+            $.extend(true, $.fn.dataTable.defaults, {
+                orderCellsTop: true,
+                @if( Gate::allows('table.select.multiple') )
+                order: [[4, 'desc']],
+                @else
+                order: [[3, 'desc']],
+                @endif
+                pageLength: 100,
+            });
+        let table = $('.datatable-{{$pageName}}:not(.ajaxTable)').DataTable({
+            buttons: dtButtons,
+            columnDefs: dtColumns,
+        })
+        $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
+        });
 
-      if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
-
-        return
-      }
-
-      if (confirm('{{ trans('global.areYouSure') }}')) {
-        $.ajax({
-          headers: {'x-csrf-token': _token},
-          method: 'POST',
-          url: config.url,
-          data: { ids: ids, _method: 'DELETE' }})
-          .done(function () { location.reload() })
-      }
-    }
-  }
-  dtButtons.push(deleteButton)
-@endcan
-
-  $.extend(true, $.fn.dataTable.defaults, {
-    orderCellsTop: true,
-    order: [[ 1, 'asc' ]],
-    pageLength: 100,
-  });
-  let table = $('.datatable-officerDisciplinaries:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
-  
-})
+    })
 
 </script>
 @endsection

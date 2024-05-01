@@ -4,7 +4,7 @@
     </a>
 @endcan
 @can($gateName.'edit')
-    @if (Gate::allows('administrator') || Auth::user()->rank->rank_order < $model->rank->rank_order)
+    @if (Gate::allows('administrator') || $pageName != 'user' || Auth::user()->rank->rank_order < $model->rank->rank_order)
         <a class="btn btn-xs btn-info" href="{{ route($crudName.'edit', $model->id) }}">
             {{ trans('global.edit') }}
         </a>
@@ -28,7 +28,7 @@
         @endcan
     @else
         @if($crudName == 'admin.officers')
-        @if (Gate::allows('administrator') || Auth::user()->rank->rank_order < $model->rank->rank_order)
+        @if (Gate::allows('administrator') || $pageName != 'user' || Auth::user()->rank->rank_order < $model->rank->rank_order)
             <form action="{{ route($crudName.'destroy', $model->id) }}" method="POST" onsubmit="delete_submit('resignation', {{$user->id}}); return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="delete_type" value="resignation">

@@ -4,11 +4,18 @@
     </a>
 @endcan
 @can($gateName.'edit')
-    @if($user && Gate::allows('administrator') || Auth::user()->rank->rank_order < $model->rank->rank_order)
+    @if($crudName == 'admin.users.')
+        @if($user && Gate::allows('administrator') || Auth::user()->rank->rank_order < $model->rank->rank_order)
+            <a class="btn btn-xs btn-info" href="{{ route($crudName.'edit', $model->id) }}">
+                {{ trans('global.edit') }}
+            </a>
+        @endif
+    @else
         <a class="btn btn-xs btn-info" href="{{ route($crudName.'edit', $model->id) }}">
             {{ trans('global.edit') }}
         </a>
-        @endif
+    @endif
+
 @endcan
 @can($gateName.'delete')
     @if($model->trashed())

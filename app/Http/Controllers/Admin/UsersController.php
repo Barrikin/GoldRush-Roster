@@ -44,7 +44,7 @@ class UsersController extends Controller
 
         $certifications = Certification::pluck('name', 'id');
 
-        if (Auth::user()->isAdministrator()) {
+        if (Gate::allows('administrator')) {
             $ranks = Rank::orderBy('rank_order')->pluck('title', 'id');
         }
         else {
@@ -56,6 +56,8 @@ class UsersController extends Controller
 
     public function store(StoreUserRequest $request)
     {
+        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $input = $request->all();
 
         if ($request->hired_on == '') { $input['hired_on'] = Carbon::now()->format('Y-m-d'); }
@@ -72,17 +74,13 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
-        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        if (! Auth::user()->isAdministrator()) {
-            abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
-        }
+        abort_if(Gate::denies('user_edit', $user), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $roles = Role::pluck('title', 'id');
 
         $certifications = Certification::pluck('name', 'id');
 
-        if (Auth::user()->isAdministrator()) {
+        if (Gate::allows('administrator')) {
             $ranks = Rank::orderBy('rank_order')->pluck('title', 'id');
         }
         else {
@@ -96,10 +94,7 @@ class UsersController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        if (! Auth::user()->isAdministrator()) {
-            abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
-            abort_if(Auth::user()->rank->rank_order >= $request->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
-        }
+        abort_if(Gate::denies('user_edit', $user), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->password != '') { $request->change_password = true; }
 
@@ -122,11 +117,7 @@ class UsersController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        if (! Auth::user()->isAdministrator()) {
-            abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
-        }
+        abort_if(Gate::denies('user_delete', $user), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->delete_type == 'resignation') {
             $user->update([
@@ -180,9 +171,7 @@ class UsersController extends Controller
         $users = User::find(request('ids'));
 
         foreach ($users as $user) {
-            if (! Auth::user()->isAdministrator()) {
-                abort_if(Auth::user()->rank->rank_order >= $user->rank->rank_order, Response::HTTP_FORBIDDEN, '403 Forbidden');
-            }
+            abort_if(Gate::denies('user_delete', $user), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
             $user->delete();
         }

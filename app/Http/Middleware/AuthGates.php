@@ -8,6 +8,7 @@ use App\Models\Rank;
 use App\Models\Role;
 use App\Models\User;
 use Closure;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 
 class AuthGates
@@ -48,7 +49,12 @@ class AuthGates
 
         $permissionsArray = Permission::pluck('id', 'title')->toArray();
         foreach ($permissionsArray as $title => $id) {
-            Gate::define($title, function ($user) use ($userPermissions, $title) {
+            Gate::define($title, function (User $user, User $target = null) use ($userPermissions, $title) {
+                if ($target?->rank?->rank_order) {
+                    if ($user->rank->rank_order >= $target->rank->rank_order) {
+                        return Response::deny('You can not edit this user.');
+                    }
+                }
                 return in_array($title, $userPermissions);
             });
         }

@@ -130,28 +130,28 @@ class UsersController extends Controller
 
         if ($request->delete_type == 'resignation') {
             $user->update([
-                'call_sign' => 'DELETED-' . Str::uuid(),
-                'badge'     => 'DELETED-' . Str::uuid(),
+                'call_sign' => null,
+                'badge'     => null,
                 'status'    => 4,
                 'password'  => Str::uuid(),
             ]);
             Comment::create([
                 'officer_id'    => $user->id,
                 'author_id'     => Auth::user()->id,
-                'comment'       => 'Resigned: ' . $request->delete_reason,
+                'comment'       => 'Callsign: '. $user->call_sign .PHP_EOL.'Badge: '. $user->badge .PHP_EOL.'Resigned: ' . $request->delete_reason,
             ]);
         }
         elseif ($request->delete_type == 'termination') {
             $user->update([
-                'call_sign' => 'DELETED-' . Str::uuid(),
-                'badge'     => 'DELETED-' . Str::uuid(),
+                'call_sign' => null,
+                'badge'     => null,
                 'status'    => 5,
                 'password'  => Str::uuid(),
             ]);
             Comment::create([
                 'officer_id'    => $user->id,
                 'author_id'     => Auth::user()->id,
-                'comment'       => 'Terminated: ' . $request->delete_reason,
+                'comment'       => 'Callsign: '. $user->call_sign .PHP_EOL.'Badge: '. $user->badge .PHP_EOL.'Terminated: ' . $request->delete_reason,
             ]);
         }
         else {

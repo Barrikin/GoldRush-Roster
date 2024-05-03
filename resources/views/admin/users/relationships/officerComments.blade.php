@@ -39,7 +39,7 @@
                     </thead>
                     <tbody>
                         @foreach($comments as $key => $comment)
-                            <tr data-entry-id="{{ $comment->id }}">
+                            <tr data-entry-id="{{ $comment->id }}" {{ $comment->trashed() ? 'class=deleted-row' : '' }}>
                                 @can('table.select.multiple')
                                     <td>
 

@@ -173,7 +173,7 @@
         <div class="tab-pane" role="tabpanel" id="officer_comments">
             @includeIf('admin.users.relationships.officerComments', [
                 'comments' => $user->officerComments,
-                'pageName' => 'comments',
+                'pageName' => 'comment',
                 'crudName' => 'admin.comments.',
                 'gateName' => 'comment_'
                 ])
@@ -181,7 +181,7 @@
         <div class="tab-pane" role="tabpanel" id="officer_trainings">
             @includeIf('admin.users.relationships.officerTrainings', [
                 'trainings' => $user->officerTrainings,
-                'pageName' => 'trainings',
+                'pageName' => 'training',
                 'crudName' => 'admin.trainings.',
                 'gateName' => 'training_'
                 ])
@@ -189,7 +189,7 @@
         <div class="tab-pane" role="tabpanel" id="officer_sop_sign_offs">
             @includeIf('admin.users.relationships.officerSopSignOffs', [
                 'sopSignOffs' => $user->officerSopSignOffs,
-                'pageName' => 'sops',
+                'pageName' => 'sop',
                 'crudName' => 'admin.sop-sign-offs.',
                 'gateName' => 'sop_sign_off_'
                 ])
@@ -197,7 +197,7 @@
         <div class="tab-pane" role="tabpanel" id="user_user_alerts">
             @includeIf('admin.users.relationships.userUserAlerts', [
                 'userAlerts' => $user->userUserAlerts,
-                'pageName' => 'alerts',
+                'pageName' => 'alert',
                 'crudName' => 'admin.user-alerts.',
                 'gateName' => 'user_alerts_'
                 ])

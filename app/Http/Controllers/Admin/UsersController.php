@@ -110,7 +110,16 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $user->load('roles', 'certifications', 'rank', 'officerDisciplinaries', 'officerComments', 'officerTrainings', 'officerSopSignOffs', 'userUserAlerts');
+        $user->load([
+            'roles' => fn($query) => $query->withTrashed(),
+            'certifications' => fn($query) => $query->withTrashed(),
+            'rank' => fn($query) => $query->withTrashed(),
+            'officerDisciplinaries' => fn($query) => $query->withTrashed(),
+            'officerComments' => fn($query) => $query->withTrashed(),
+            'officerTrainings' => fn($query) => $query->withTrashed(),
+            'officerSopSignOffs' => fn($query) => $query->withTrashed(),
+            'userUserAlerts',
+        ]);
 
         return view('admin.users.show', compact('user'));
     }

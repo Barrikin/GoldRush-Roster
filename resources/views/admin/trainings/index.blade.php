@@ -58,7 +58,7 @@
                 </thead>
                 <tbody>
                     @foreach($trainings as $key => $training)
-                        <tr data-entry-id="{{ $training->id }}">
+                        <tr data-entry-id="{{ $training->id }}" {{ $training->trashed() ? 'class=deleted-row' : '' }}>
                             @can('table.select.multiple')
                                 <td>
 

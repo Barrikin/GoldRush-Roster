@@ -18,6 +18,12 @@ class RankController extends Controller
     {
         abort_if(Gate::denies('rank_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        if (Gate::allows('trash.view')) {
+            $ranks = Rank::withTrashed()->with(['permissions'])->get();
+        }
+        else {
+            $ranks = Rank::with(['permissions'])->get();
+        }
         $ranks = Rank::with(['permissions'])->get();
 
         return view('admin.ranks.index', compact('ranks'));
@@ -75,6 +81,18 @@ class RankController extends Controller
         $rank->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        Rank::withTrashed()->findOrFail($request->post()['rank_id'])->restore();
+
+        return redirect()->route('admin.ranks.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Rank::withTrashed()->findOrFail($request->post()['rank_id'])->forceDelete();
+
+        return redirect()->route('admin.ranks.index');
     }
 
     public function massDestroy(MassDestroyRankRequest $request)

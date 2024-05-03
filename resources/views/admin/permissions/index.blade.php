@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                     @foreach($permissions as $key => $permission)
-                        <tr data-entry-id="{{ $permission->id }}">
+                        <tr data-entry-id="{{ $permission->id }}" {{ $permission->trashed() ? 'class=deleted-row' : '' }}>
                             <td>
 
                             </td>
@@ -124,7 +124,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

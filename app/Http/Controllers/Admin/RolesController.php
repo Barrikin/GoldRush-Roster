@@ -18,7 +18,13 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $roles = Role::with(['permissions'])->get();
+        if (Gate::allows('trash.view')) {
+            $roles = Role::withTrashed()->with(['permissions'])->get();
+        }
+        else {
+            $roles = Role::with(['permissions'])->get();
+        }
+
 
         return view('admin.roles.index', compact('roles'));
     }
@@ -75,6 +81,18 @@ class RolesController extends Controller
         $role->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        Role::withTrashed()->findOrFail($request->post()['role_id'])->restore();
+
+        return redirect()->route('admin.roles.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Role::withTrashed()->findOrFail($request->post()['role_id'])->forceDelete();
+
+        return redirect()->route('admin.roles.index');
     }
 
     public function massDestroy(MassDestroyRoleRequest $request)

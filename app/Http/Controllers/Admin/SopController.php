@@ -22,7 +22,13 @@ class SopController extends Controller
     {
         abort_if(Gate::denies('sop_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $sops = Sop::with(['ranks'])->get();
+        if (Gate::allows('trash.view')) {
+            $sops = Sop::withTrashed()->with(['ranks'])->get();
+        }
+        else {
+            $sops = Sop::with(['ranks'])->get();
+        }
+
 
         $pageName = 'sop';
         $crudName = 'admin.sops.';
@@ -96,6 +102,18 @@ class SopController extends Controller
         }
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function restore(Request $request) {
+        Sop::withTrashed()->findOrFail($request->post()['sop_id'])->restore();
+
+        return redirect()->route('admin.sops.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Sop::withTrashed()->findOrFail($request->post()['sop_id'])->forceDelete();
+
+        return redirect()->route('admin.sops.index');
     }
 
     public function storeCKEditorImages(Request $request)

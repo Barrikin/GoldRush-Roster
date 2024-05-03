@@ -60,7 +60,7 @@
                     </thead>
                     <tbody>
                     @foreach($users as $key => $user)
-                        <tr data-entry-id="{{ $user->id }}">
+                        <tr data-entry-id="{{ $user->id }}" {{ $user->trashed() ? 'class=deleted-row' : '' }}>
                             @can('table.select.multiple')
                             <td>
 

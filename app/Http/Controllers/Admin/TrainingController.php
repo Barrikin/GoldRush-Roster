@@ -23,7 +23,13 @@ class TrainingController extends Controller
     {
         abort_if(Gate::denies('training_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $trainings = Training::with(['officer', 'course', 'understood_fto', 'executed_fto'])->get();
+        if (Gate::allows('trash.view')) {
+            $trainings = Training::withTrashed()->with(['officer', 'course', 'understood_fto', 'executed_fto'])->get();
+        }
+        else {
+            $trainings = Training::with(['officer', 'course', 'understood_fto', 'executed_fto'])->get();
+        }
+
 
         $pageName = 'training';
         $crudName = 'admin.trainings.';
@@ -97,6 +103,18 @@ class TrainingController extends Controller
         $training->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        Training::withTrashed()->findOrFail($request->post()['training_id'])->restore();
+
+        return redirect()->route('admin.trainings.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Training::withTrashed()->findOrFail($request->post()['training_id'])->forceDelete();
+
+        return redirect()->route('admin.trainings.index');
     }
 
     public function massDestroy(MassDestroyTrainingRequest $request)

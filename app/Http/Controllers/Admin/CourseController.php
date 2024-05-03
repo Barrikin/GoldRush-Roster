@@ -21,7 +21,13 @@ class CourseController extends Controller
     {
         abort_if(Gate::denies('course_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $courses = Course::all();
+        if (Gate::allows('trash.view')) {
+            $courses = Course::withTrashed()->get();
+        }
+        else {
+            $courses = Course::all();
+        }
+
 
         $pageName = 'course';
         $crudName = 'admin.courses.';
@@ -75,6 +81,18 @@ class CourseController extends Controller
         $course->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        Course::withTrashed()->findOrFail($request->post()['course_id'])->restore();
+
+        return redirect()->route('admin.courses.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Course::withTrashed()->findOrFail($request->post()['course_id'])->forceDelete();
+
+        return redirect()->route('admin.courses.index');
     }
 
     public function massDestroy(MassDestroyCourseRequest $request)

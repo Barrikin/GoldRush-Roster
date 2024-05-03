@@ -19,7 +19,13 @@ class SopSignOffsController extends Controller
     {
         abort_if(Gate::denies('sop_sign_off_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $sopSignOffs = SopSignOff::with(['officer', 'sop'])->get();
+        if (Gate::allows('trash.view')) {
+            $sopSignOffs = SopSignOff::withTrashed()->with(['officer', 'sop'])->get();
+        }
+        else {
+            $sopSignOffs = SopSignOff::with(['officer', 'sop'])->get();
+        }
+
 
         $pageName = 'SopSignOff';
         $crudName = 'admin.sop-sign-offs.';
@@ -81,6 +87,18 @@ class SopSignOffsController extends Controller
         $sopSignOff->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        SopSignOff::withTrashed()->findOrFail($request->post()['sop-sign-off_id'])->restore();
+
+        return redirect()->route('admin.sop-sign-offs.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        SopSignOff::withTrashed()->findOrFail($request->post()['sop-sign-off_id'])->forceDelete();
+
+        return redirect()->route('admin.sop-sign-offs.index');
     }
 
     public function massDestroy(MassDestroySopSignOffRequest $request)

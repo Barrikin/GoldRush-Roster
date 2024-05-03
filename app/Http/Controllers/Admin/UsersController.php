@@ -24,8 +24,8 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if ($request->trashed == 'true') {
-            $users = User::onlyTrashed()->with(['roles', 'certifications', 'rank'])->get();
+        if (Gate::allows('trash.view')) {
+            $users = User::withTrashed()->with(['roles', 'certifications', 'rank'])->get();
         }
         else {
             $users = User::with(['roles', 'certifications', 'rank'])->get();

@@ -22,7 +22,12 @@ class CommentsController extends Controller
     {
         abort_if(Gate::denies('comment_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $comments = Comment::with(['officer', 'author'])->get();
+        if (Gate::allows('trash.view')) {
+            $comments = Comment::withTrashed()->with(['officer', 'author'])->get();
+        }
+        else {
+            $comments = Comment::with(['officer', 'author'])->get();
+        }
 
         $pageName = 'comment';
         $crudName = 'admin.comments.';
@@ -88,6 +93,18 @@ class CommentsController extends Controller
         $comment->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        Comment::withTrashed()->findOrFail($request->post()['comment_id'])->restore();
+
+        return redirect()->route('admin.comments.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Comment::withTrashed()->findOrFail($request->post()['comment_id'])->forceDelete();
+
+        return redirect()->route('admin.comments.index');
     }
 
     public function massDestroy(MassDestroyCommentRequest $request)

@@ -17,7 +17,13 @@ class PermissionsController extends Controller
     {
         abort_if(Gate::denies('permission_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $permissions = Permission::all();
+        if (Gate::allows('trash.view')) {
+            $permissions = Permission::withTrashed()->get();
+        }
+        else {
+            $permissions = Permission::all();
+        }
+
 
         return view('admin.permissions.index', compact('permissions'));
     }
@@ -64,6 +70,18 @@ class PermissionsController extends Controller
         $permission->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        Permission::withTrashed()->findOrFail($request->post()['permission_id'])->restore();
+
+        return redirect()->route('admin.permissions.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Permission::withTrashed()->findOrFail($request->post()['permission_id'])->forceDelete();
+
+        return redirect()->route('admin.permissions.index');
     }
 
     public function massDestroy(MassDestroyPermissionRequest $request)

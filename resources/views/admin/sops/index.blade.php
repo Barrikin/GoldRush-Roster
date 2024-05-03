@@ -40,7 +40,7 @@
                 </thead>
                 <tbody>
                     @foreach($sops as $key => $sop)
-                        <tr data-entry-id="{{ $sop->id }}">
+                        <tr data-entry-id="{{ $sop->id }}" {{ $sop->trashed() ? 'class=deleted-row' : '' }}>
                             @can('table.select.multiple')
                                 <td>
 

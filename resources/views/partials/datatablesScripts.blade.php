@@ -3,6 +3,7 @@
         let languages = {
             'en': 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json'
         };
+        let showTrashed = false;
 
         $.extend(true, $.fn.dataTable.Buttons.defaults.dom.button, {className: 'btn'})
         $.extend(true, $.fn.dataTable.defaults, {
@@ -146,36 +147,44 @@
                 },
                     @endcan
                     @can('trash.view')
-                    @if( Request::input('trashed') == 'true' )
                 {
-                    text: 'Show Active',
-                    className: 'btn-success',
-                    titleAttr: 'Show Active items',
-                    init: function (dt, node, config) {
-                        $(node).click(function () {
-                            window.location.href = '{{Request::url()}}?trashed=false'
-                        })
-                    }
-
-                }
-                    @else
-                {
-                    text: 'Show Deleted',
+                    text: 'Toggle Trash',
                     className: 'btn-warning',
                     titleAttr: 'Show Deleted items',
-                    init: function (dt, node, config) {
-                        $(node).click(function () {
-                            window.location.href = '{{Request::url()}}?trashed=true'
-                        })
+                    action: function (e, dt) {
+                        e.preventDefault()
+                        if (showTrashed) {
+                            showTrashed = false;
+                        }
+                        else {
+                            showTrashed = true;
+                        }
+                        dt.draw();
                     }
 
                 },
-                    @endif
                     @endcan
             ]
         });
 
         $.fn.dataTable.ext.classes.sPageButton = '';
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+
+                var api = new $.fn.dataTable.Api( settings ); // Get API instance for table
+                var node = api.row(index).node();
+
+                if ($(node).hasClass('deleted-row')) {
+                    if (showTrashed) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        );
     });
 
 </script>

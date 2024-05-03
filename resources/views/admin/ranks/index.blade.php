@@ -38,7 +38,7 @@
                 </thead>
                 <tbody>
                     @foreach($ranks as $key => $rank)
-                        <tr data-entry-id="{{ $rank->id }}">
+                        <tr data-entry-id="{{ $rank->id }}" {{ $rank->trashed() ? 'class=deleted-row' : '' }}>
                             <td>
 
                             </td>

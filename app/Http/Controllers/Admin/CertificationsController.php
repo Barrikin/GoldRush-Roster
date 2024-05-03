@@ -18,7 +18,12 @@ class CertificationsController extends Controller
     {
         abort_if(Gate::denies('certification_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $certifications = Certification::with(['permissions'])->get();
+        if (Gate::allows('trash.view')) {
+            $certifications = Certification::withTrashed()->with(['permissions'])->get();
+        }
+        else {
+            $certifications = Certification::with(['permissions'])->get();
+        }
 
         return view('admin.certifications.index', compact('certifications'));
     }
@@ -75,6 +80,18 @@ class CertificationsController extends Controller
         $certification->delete();
 
         return back();
+    }
+
+    public function restore(Request $request) {
+        Certification::withTrashed()->findOrFail($request->post()['certification_id'])->restore();
+
+        return redirect()->route('admin.Certifications.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Certification::withTrashed()->findOrFail($request->post()['certification_id'])->forceDelete();
+
+        return redirect()->route('admin.Certifications.index');
     }
 
     public function massDestroy(MassDestroyCertificationRequest $request)

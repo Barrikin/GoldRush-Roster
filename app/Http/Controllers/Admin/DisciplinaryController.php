@@ -22,7 +22,13 @@ class DisciplinaryController extends Controller
     {
         abort_if(Gate::denies('disciplinary_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $disciplinaries = Disciplinary::with(['officer', 'issued_by'])->get();
+        if (Gate::allows('trash.view')) {
+            $disciplinaries = Disciplinary::withTrashed()->with(['officer', 'issued_by'])->get();
+        }
+        else {
+            $disciplinaries = Disciplinary::with(['officer', 'issued_by'])->get();
+        }
+
 
         $pageName = 'disciplinary';
         $crudName = 'admin.disciplinaries.';
@@ -99,6 +105,18 @@ class DisciplinaryController extends Controller
         }
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function restore(Request $request) {
+        Disciplinary::withTrashed()->findOrFail($request->post()['disciplinary_id'])->restore();
+
+        return redirect()->route('admin.disciplinarys.index');
+    }
+
+    public function forceDestroy(Request $request) {
+        Disciplinary::withTrashed()->findOrFail($request->post()['disciplinary_id'])->forceDelete();
+
+        return redirect()->route('admin.disciplinarys.index');
     }
 
     public function storeCKEditorImages(Request $request)

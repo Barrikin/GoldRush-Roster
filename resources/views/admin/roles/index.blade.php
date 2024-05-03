@@ -38,7 +38,7 @@
                 </thead>
                 <tbody>
                     @foreach($roles as $key => $role)
-                        <tr data-entry-id="{{ $role->id }}">
+                        <tr data-entry-id="{{ $role->id }}" {{ $role->trashed() ? 'class=deleted-row' : '' }}>
                             <td>
 
                             </td>
@@ -132,7 +132,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

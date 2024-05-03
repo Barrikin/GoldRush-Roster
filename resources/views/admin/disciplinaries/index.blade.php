@@ -49,7 +49,7 @@
                 </thead>
                 <tbody>
                     @foreach($disciplinaries as $key => $disciplinary)
-                        <tr data-entry-id="{{ $disciplinary->id }}">
+                        <tr data-entry-id="{{ $disciplinary->id }}" {{ $disciplinary->trashed() ? 'class=deleted-row' : '' }}>
                             @can('table.select.multiple')
                                 <td>
 

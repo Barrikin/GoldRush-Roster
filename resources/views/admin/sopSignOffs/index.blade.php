@@ -43,7 +43,7 @@
                 </thead>
                 <tbody>
                     @foreach($sopSignOffs as $key => $sopSignOff)
-                        <tr data-entry-id="{{ $sopSignOff->id }}">
+                        <tr data-entry-id="{{ $sopSignOff->id }}" {{ $sopSignOff->trashed() ? 'class=deleted-row' : '' }}>
                             @can('table.select.multiple')
                                 <td>
 

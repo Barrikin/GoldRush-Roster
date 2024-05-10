@@ -28,7 +28,6 @@ class StoreSopRequest extends FormRequest
                 'integer',
             ],
             'ranks' => [
-                'required',
                 'array',
             ],
         ];

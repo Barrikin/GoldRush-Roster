@@ -26,22 +26,6 @@
                 <span class="help-block">{{ trans('cruds.sop.fields.sop_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="ranks">{{ trans('cruds.sop.fields.rank') }}</label>
-                <div style="padding-bottom: 4px">
-                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
-                </div>
-                <select class="form-control select2 {{ $errors->has('ranks') ? 'is-invalid' : '' }}" name="ranks[]" id="ranks" multiple required>
-                    @foreach($ranks as $id => $rank)
-                        <option value="{{ $id }}" {{ in_array($id, old('ranks', [])) ? 'selected' : '' }}>{{ $rank }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('ranks'))
-                    <span class="text-danger">{{ $errors->first('ranks') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.sop.fields.rank_helper') }}</span>
-            </div>
-            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

@@ -28,7 +28,6 @@ class UpdateSopRequest extends FormRequest
                 'integer',
             ],
             'ranks' => [
-                'required',
                 'array',
             ],
         ];

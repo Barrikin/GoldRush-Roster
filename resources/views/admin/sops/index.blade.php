@@ -31,9 +31,6 @@
                             {{ trans('cruds.sop.fields.title') }}
                         </th>
                         <th>
-                            {{ trans('cruds.sop.fields.rank') }}
-                        </th>
-                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -51,11 +48,6 @@
                             </td>
                             <td>
                                 {{ $sop->title ?? '' }}
-                            </td>
-                            <td>
-                                @foreach($sop->ranks as $key => $item)
-                                    <span class="badge badge-info">{{ $item->title }}</span>
-                                @endforeach
                             </td>
                             <td>
                                 @include('partials.datatablesActions', ['model' => $sop])

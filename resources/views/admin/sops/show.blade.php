@@ -16,37 +16,13 @@
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
-                        <th>
-                            {{ trans('cruds.sop.fields.id') }}
-                        </th>
-                        <td>
-                            {{ $sop->id }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.sop.fields.title') }}
-                        </th>
                         <td>
                             {{ $sop->title }}
                         </td>
                     </tr>
                     <tr>
-                        <th>
-                            {{ trans('cruds.sop.fields.sop') }}
-                        </th>
                         <td>
-                            {!! $sop->sop !!}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.sop.fields.rank') }}
-                        </th>
-                        <td>
-                            @foreach($sop->ranks as $key => $rank)
-                                <span class="label label-info">{{ $rank->title }}</span>
-                            @endforeach
+                            {!! html_entity_decode($sop->sop) !!}
                         </td>
                     </tr>
                 </tbody>

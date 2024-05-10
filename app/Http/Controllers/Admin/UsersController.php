@@ -25,10 +25,10 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if (Gate::allows('trash.view')) {
-            $users = User::withTrashed()->with(['roles', 'certifications', 'rank'])->where('id', '!=', 25)->get();
+            $users = User::withTrashed()->with(['roles', 'certifications', 'rank'])->where('id', '!=', 1)->get();
         }
         else {
-            $users = User::with(['roles', 'certifications', 'rank'])->where('id', '!=', 25)->get();
+            $users = User::with(['roles', 'certifications', 'rank'])->where('id', '!=', 1)->get();
         }
         $pageName = 'user';
         $crudName = 'admin.users.';

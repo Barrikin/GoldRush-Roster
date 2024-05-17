@@ -129,29 +129,29 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_delete', $user), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->delete_type == 'resignation') {
+            Comment::create([
+                'officer_id'    => $user->id,
+                'author_id'     => Auth::user()->id,
+                'comment'       => 'Callsign: '. $user->call_sign .PHP_EOL.'Badge: '. $user->badge .PHP_EOL.'Resigned: ' . $request->delete_reason,
+            ]);
             $user->update([
                 'call_sign' => null,
                 'badge'     => null,
                 'status'    => 4,
                 'password'  => Str::uuid(),
             ]);
+        }
+        elseif ($request->delete_type == 'termination') {
             Comment::create([
                 'officer_id'    => $user->id,
                 'author_id'     => Auth::user()->id,
-                'comment'       => 'Callsign: '. $user->call_sign .PHP_EOL.'Badge: '. $user->badge .PHP_EOL.'Resigned: ' . $request->delete_reason,
+                'comment'       => 'Callsign: '. $user->call_sign .PHP_EOL.'Badge: '. $user->badge .PHP_EOL.'Terminated: ' . $request->delete_reason,
             ]);
-        }
-        elseif ($request->delete_type == 'termination') {
             $user->update([
                 'call_sign' => null,
                 'badge'     => null,
                 'status'    => 5,
                 'password'  => Str::uuid(),
-            ]);
-            Comment::create([
-                'officer_id'    => $user->id,
-                'author_id'     => Auth::user()->id,
-                'comment'       => 'Callsign: '. $user->call_sign .PHP_EOL.'Badge: '. $user->badge .PHP_EOL.'Terminated: ' . $request->delete_reason,
             ]);
         }
         else {

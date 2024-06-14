@@ -26,11 +26,6 @@ class StoreUserRequest extends FormRequest
                 'string',
                 'required',
             ],
-            'badge' => [
-                'required',
-                'string',
-                'unique:users,badge',
-            ],
             'roles.*' => [
                 'integer',
             ],

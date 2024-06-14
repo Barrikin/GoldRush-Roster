@@ -66,6 +66,8 @@ class UsersController extends Controller
         $input['change_password'] = true;
 
         $user = User::create($input);
+        $user->badge = $user->id + 100;
+        $user->save();
         $user->roles()->sync($request->input('roles', []));
         $user->certifications()->sync($request->input('certifications', []));
 

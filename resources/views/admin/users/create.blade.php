@@ -28,15 +28,6 @@
                     <span class="help-block">{{ trans('cruds.user.fields.name_helper') }}</span>
                 </div>
                 <div class="form-group">
-                    <label class="required" for="badge">{{ trans('cruds.user.fields.badge') }}</label>
-                    <input class="form-control {{ $errors->has('badge') ? 'is-invalid' : '' }}" type="text" name="badge"
-                           id="badge" value="{{ old('badge', '') }}" step="1" required>
-                    @if($errors->has('badge'))
-                        <span class="text-danger">{{ $errors->first('badge') }}</span>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.user.fields.badge_helper') }}</span>
-                </div>
-                <div class="form-group">
                     <label class="required" for="rank_id">{{ trans('cruds.user.fields.rank') }}</label>
                     <select class="form-control select2 {{ $errors->has('rank') ? 'is-invalid' : '' }}" name="rank_id"
                             id="rank_id" required>

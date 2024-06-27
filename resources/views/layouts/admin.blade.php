@@ -32,6 +32,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
                 </li>
             </ul>
+            <span id="time"></span>
             <script type="text/javascript" charset="utf-8">
                 let a;
                 let time;
@@ -60,7 +61,7 @@
                 time = months[a.getMonth()] + ' ' + a.getDate() + ' ' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes() + ' EST' + ' Week: ' + getWeekNumber(a);
                 document.getElementById('time').innerHTML = time;
             </script>
-            <span id="time"></span>
+
 
             <!-- Right navbar links -->
             @if(count(config('panel.available_languages', [])) > 1)

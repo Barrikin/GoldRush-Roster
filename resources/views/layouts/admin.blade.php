@@ -33,6 +33,18 @@
                 </li>
             </ul>
 
+            <script type="text/javascript" charset="utf-8">
+                let a;
+                let time;
+                setInterval(() => {
+                    a = new Date();
+                    a.toLocaleString('en-US', { timeZone: 'America/New_York' })
+                    time = 'EST: ' + a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds() + ' Week: ' + a.getWeekNumber();
+                    document.getElementById('time').innerHTML = time;
+                }, 1000);
+            </script>
+            <span id="time"></span>
+
             <!-- Right navbar links -->
             @if(count(config('panel.available_languages', [])) > 1)
                 <ul class="navbar-nav ml-auto">

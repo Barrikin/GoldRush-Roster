@@ -138,7 +138,6 @@ class UsersController extends Controller
             ]);
             $user->update([
                 'call_sign' => null,
-                'badge'     => null,
                 'status'    => 4,
                 'password'  => Str::uuid(),
             ]);
@@ -151,7 +150,6 @@ class UsersController extends Controller
             ]);
             $user->update([
                 'call_sign' => null,
-                'badge'     => null,
                 'status'    => 5,
                 'password'  => Str::uuid(),
             ]);

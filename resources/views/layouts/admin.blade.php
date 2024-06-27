@@ -32,7 +32,6 @@
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
                 </li>
             </ul>
-dfgfdg
             <script type="text/javascript" charset="utf-8">
                 let a;
                 let time;
@@ -43,7 +42,7 @@ dfgfdg
                     document.getElementById('time').innerHTML = time;
                 }, 1000);
             </script>
-            <span id="time"></span>
+            <span id="time">gh</span>
 
             <!-- Right navbar links -->
             @if(count(config('panel.available_languages', [])) > 1)

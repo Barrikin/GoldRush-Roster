@@ -46,12 +46,13 @@
                     // Calculate full weeks to nearest Thursday
                     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
                     // Return array of year and week number
-                    return [d.getUTCFullYear(), weekNo];
+                    return weekNo;
                 }
+                const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                 setInterval(() => {
                     a = new Date();
                     a.toLocaleString('en-US', { timeZone: 'America/New_York' })
-                    time = 'EST: ' + a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds() + ' Week: ' + getWeekNumber(a);
+                    time = months[a.getMonth()] + a.getDay() + a.getFullYear() + a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds() + a.getTimezoneOffset() + ' Week: ' + getWeekNumber(a);
                     document.getElementById('time').innerHTML = time;
                 }, 1000);
             </script>

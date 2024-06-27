@@ -55,6 +55,10 @@
                     time = months[a.getMonth()] + ' ' + a.getDate() + ' ' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes() + ' EST' + ' Week: ' + getWeekNumber(a);
                     document.getElementById('time').innerHTML = time;
                 }, 60000);
+                a = new Date();
+                a.toLocaleString('en-US', { timeZone: 'America/New_York' })
+                time = months[a.getMonth()] + ' ' + a.getDate() + ' ' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes() + ' EST' + ' Week: ' + getWeekNumber(a);
+                document.getElementById('time').innerHTML = time;
             </script>
             <span id="time"></span>
 

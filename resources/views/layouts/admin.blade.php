@@ -52,7 +52,7 @@
                 setInterval(() => {
                     a = new Date();
                     a.toLocaleString('en-US', { timeZone: 'America/New_York' })
-                    time = months[a.getMonth()] + ' ' + a.getDate() + ' ' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds() + a.getTimezoneOffset() + ' Week: ' + getWeekNumber(a);
+                    time = months[a.getMonth()] + ' ' + a.getDate() + ' ' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds() + ' EST' + ' Week: ' + getWeekNumber(a);
                     document.getElementById('time').innerHTML = time;
                 }, 1000);
             </script>

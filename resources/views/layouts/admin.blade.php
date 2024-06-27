@@ -52,11 +52,11 @@
                 setInterval(() => {
                     a = new Date();
                     a.toLocaleString('en-US', { timeZone: 'America/New_York' })
-                    time = months[a.getMonth()] + a.getDay() + a.getFullYear() + a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds() + a.getTimezoneOffset() + ' Week: ' + getWeekNumber(a);
+                    time = months[a.getMonth()] + ' ' + a.getDate() + ' ' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds() + a.getTimezoneOffset() + ' Week: ' + getWeekNumber(a);
                     document.getElementById('time').innerHTML = time;
                 }, 1000);
             </script>
-            <span id="time">gh</span>
+            <span id="time"></span>
 
             <!-- Right navbar links -->
             @if(count(config('panel.available_languages', [])) > 1)
